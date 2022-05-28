@@ -1,0 +1,15 @@
+*.session
+*.data
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.db-lock
+*.db-log
+*.db-tmp
+*.db-bak
+*.db-wal-bak
+*.db-shm-bak
+*.db-lock-bak
+*.db-log-bak
+*.db-tmp-bak

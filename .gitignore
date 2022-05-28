@@ -1,0 +1,34 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+wotoubBinary
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# session files
+session/*.json
+session/*.ub
+session/*.session
+session/*.date
+session/*.info
+session/*.woto
+session/*.w
+session/*.wotoub
+session/*.wotoutils
+
+# log files
+*.log
+
+# configuration file
+config.ini
+
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
