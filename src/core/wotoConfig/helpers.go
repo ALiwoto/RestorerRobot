@@ -72,6 +72,16 @@ func IsDebug() bool {
 	return WotoConf.Main.Debug
 }
 
+func GetSectionValueByName(name string) *ValueSection {
+	for _, v := range WotoConf.Sections {
+		if name == v.GetSectionName() {
+			return v
+		}
+	}
+
+	return nil
+}
+
 func IsOwner(id int64) bool {
 	for _, v := range WotoConf.Main.Owners {
 		if v == id {

@@ -20,8 +20,8 @@ func statusHandler(container *em.WotoContainer) error {
 	txt := wotoStyle.GetEmpty()
 	txt.Bold("🔹 @" + wotoGlobals.Self.Username + "'s stats:")
 	txt.Bold("\n • Version: ").Mono(wotoGlobals.AppVersion)
-	txt.AppendBoldThis("\n • Status: ")
-	txt.AppendMonoThis("Active")
+	txt.Bold("\n • Status: ")
+	txt.Mono("Active")
 	fetchGitStats(txt)
 	container.ReplyStyledText(txt)
 
