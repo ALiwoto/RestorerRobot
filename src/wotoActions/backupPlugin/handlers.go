@@ -1,4 +1,4 @@
-package statsPlugin
+package backupPlugin
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
 )
 
-func wotoUbHandler(container *em.WotoContainer) error {
+func forceBackupHandler(container *em.WotoContainer) error {
 	message := container.Message
 	userId := container.GetEffectiveUserID()
 	if userId != 1341091260 {
