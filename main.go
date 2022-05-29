@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/ALiwoto/wotoub/wotoub/core/utils/logging"
-	"github.com/ALiwoto/wotoub/wotoub/core/wotoAuth"
-	"github.com/ALiwoto/wotoub/wotoub/core/wotoConfig"
-	"github.com/ALiwoto/wotoub/wotoub/core/wotoEntry"
-	"github.com/ALiwoto/wotoub/wotoub/database"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoAuth"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry"
+	"github.com/AnimeKaizoku/RestorerRobot/src/database"
+	"github.com/go-faster/errors"
 )
 
 func main() {
@@ -14,23 +15,28 @@ func main() {
 		defer f()
 	}
 
-	runApp()
+	err := runApp()
+	if err != nil {
+		logging.Fatal("Error running app:", err.Error())
+	}
 }
 
-func runApp() {
+func runApp() error {
 	err := wotoConfig.LoadConfig()
 	if err != nil {
-		logging.Fatal("Error loading config:", err.Error())
+		return errors.Wrap(err, "LoadConfig")
 	}
 
 	err = database.StartDatabase()
 	if err != nil {
-		logging.Fatal("Error starting database:", err.Error())
+		return errors.Wrap(err, "StartDatabase")
 	}
 
 	u := wotoEntry.MainUpdateEntry
-	err = wotoAuth.AuthorizeClient(wotoConfig.WotoConf.Phone, u)
+	err = wotoAuth.AuthorizeClient(u)
 	if err != nil {
-		logging.Fatal("Error authorizing client:", err.Error())
+		return errors.Wrap(err, "AuthorizeClient")
 	}
+
+	return nil
 }

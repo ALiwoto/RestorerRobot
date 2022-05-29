@@ -4,7 +4,7 @@ buildApp()
 	# clear the screen (the terminal)
 	clear
 
-	echo -e "building wotoubBinary, please wait a bit..."
+	echo -e "building botBinary, please wait a bit..."
 
 	go build -o wotoubBinary
 }
