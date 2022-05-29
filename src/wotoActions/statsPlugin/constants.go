@@ -2,5 +2,5 @@ package statsPlugin
 
 // commands constants
 const (
-	CmdWotoUb = "wotoub"
+	statusCmd = "status"
 )

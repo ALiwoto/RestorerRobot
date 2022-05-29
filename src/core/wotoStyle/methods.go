@@ -63,11 +63,19 @@ func (s *wotoStyling) AppendNormalThis(v string) WStyle {
 	return s.AppendByFuncThis(v, styling.Plain)
 }
 
+func (s *wotoStyling) Normal(v string) WStyle {
+	return s.AppendByFuncThis(v, styling.Plain)
+}
+
 func (s *wotoStyling) AppendBold(v string) WStyle {
 	return s.AppendByFunc(v, styling.Bold)
 }
 
 func (s *wotoStyling) AppendBoldThis(v string) WStyle {
+	return s.AppendByFuncThis(v, styling.Bold)
+}
+
+func (s *wotoStyling) Bold(v string) WStyle {
 	return s.AppendByFuncThis(v, styling.Bold)
 }
 
@@ -79,11 +87,19 @@ func (s *wotoStyling) AppendSpoilerThis(v string) WStyle {
 	return s.AppendByFuncThis(v, styling.Spoiler)
 }
 
+func (s *wotoStyling) Spoiler(v string) WStyle {
+	return s.AppendByFuncThis(v, styling.Spoiler)
+}
+
 func (s *wotoStyling) AppendItalic(v string) WStyle {
 	return s.AppendByFunc(v, styling.Italic)
 }
 
 func (s *wotoStyling) AppendItalicThis(v string) WStyle {
+	return s.AppendByFuncThis(v, styling.Italic)
+}
+
+func (s *wotoStyling) Italic(v string) WStyle {
 	return s.AppendByFuncThis(v, styling.Italic)
 }
 
@@ -95,6 +111,10 @@ func (s *wotoStyling) AppendMonoThis(v string) WStyle {
 	return s.AppendByFuncThis(v, styling.Code)
 }
 
+func (s *wotoStyling) Mono(v string) WStyle {
+	return s.AppendByFuncThis(v, styling.Code)
+}
+
 func (s *wotoStyling) AppendHyperLink(text, url string) WStyle {
 	return s.AppendByFunc(text, func(s string) styling.StyledTextOption {
 		return styling.TextURL(s, url)
@@ -102,6 +122,12 @@ func (s *wotoStyling) AppendHyperLink(text, url string) WStyle {
 }
 
 func (s *wotoStyling) AppendHyperLinkThis(text, url string) WStyle {
+	return s.AppendByFuncThis(text, func(s string) styling.StyledTextOption {
+		return styling.TextURL(s, url)
+	})
+}
+
+func (s *wotoStyling) Link(text, url string) WStyle {
 	return s.AppendByFuncThis(text, func(s string) styling.StyledTextOption {
 		return styling.TextURL(s, url)
 	})
@@ -129,6 +155,17 @@ func (s *wotoStyling) AppendMentionThis(text string, id int64) WStyle {
 	})
 }
 
+func (s *wotoStyling) Mention(text string, id int64) WStyle {
+	return s.AppendByFuncThis(text, func(s string) styling.StyledTextOption {
+		input := tgUtils.GetInputUserFromId(id)
+		if input == nil {
+			return styling.Code(s)
+		}
+
+		return styling.MentionName(s, input)
+	})
+}
+
 func (s *wotoStyling) AppendUserMention(text string, u *tg.User) WStyle {
 	if u == nil {
 		return s.AppendMono(text)
@@ -137,6 +174,13 @@ func (s *wotoStyling) AppendUserMention(text string, u *tg.User) WStyle {
 }
 
 func (s *wotoStyling) AppendUserMentionThis(text string, u *tg.User) WStyle {
+	if u == nil {
+		return s.AppendMonoThis(text)
+	}
+	return s.AppendMentionHashThis(text, u.ID, u.AccessHash)
+}
+
+func (s *wotoStyling) UserMention(text string, u *tg.User) WStyle {
 	if u == nil {
 		return s.AppendMonoThis(text)
 	}
@@ -166,6 +210,16 @@ func (s *wotoStyling) AppendMentionUsername(text string, username string) WStyle
 }
 
 func (s *wotoStyling) AppendMentionUsernameThis(text string, username string) WStyle {
+	return s.AppendByFuncThis(text, func(s string) styling.StyledTextOption {
+		u := tgUtils.GetInputUserFromUsername(username)
+		if u == nil {
+			return styling.Code(s)
+		}
+		return styling.MentionName(s, u)
+	})
+}
+
+func (s *wotoStyling) MentionUsername(text string, username string) WStyle {
 	return s.AppendByFuncThis(text, func(s string) styling.StyledTextOption {
 		u := tgUtils.GetInputUserFromUsername(username)
 		if u == nil {

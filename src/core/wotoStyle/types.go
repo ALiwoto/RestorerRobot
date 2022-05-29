@@ -34,6 +34,17 @@ type WStyle interface {
 	AppendMentionHashThis(text string, u, hash int64) WStyle
 	AppendMentionUsername(text string, username string) WStyle
 	AppendMentionUsernameThis(text string, username string) WStyle
+
+	Normal(v string) WStyle
+	Bold(v string) WStyle
+	Italic(v string) WStyle
+	Mono(v string) WStyle
+	Spoiler(v string) WStyle
+	Link(text, url string) WStyle
+	Mention(text string, id int64) WStyle
+	UserMention(text string, u *tg.User) WStyle
+	MentionUsername(text string, username string) WStyle
+
 	El() WStyle
 	ElThis() WStyle
 	Space() WStyle

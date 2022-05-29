@@ -6,9 +6,10 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
 	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 )
 
-func wotoUbHandler(container *em.WotoContainer) error {
+func statusHandler(container *em.WotoContainer) error {
 	message := container.Message
 	userId := container.GetEffectiveUserID()
 	if userId != 1341091260 {
@@ -16,7 +17,8 @@ func wotoUbHandler(container *em.WotoContainer) error {
 	}
 	input := tgUtils.GetInputUserFromId(userId)
 	print(input)
-	txt := wotoStyle.GetBold("wotoub ")
+
+	txt := wotoStyle.GetBold("@" + wotoGlobals.Self.Username + ":")
 	txt.AppendMonoThis("v1.0.1")
 	txt.AppendBoldThis("\n • Status: ")
 	txt.AppendMonoThis("Active")
