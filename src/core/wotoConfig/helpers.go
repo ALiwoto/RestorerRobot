@@ -72,6 +72,15 @@ func IsDebug() bool {
 	return WotoConf.Main.Debug
 }
 
+func IsOwner(id int64) bool {
+	for _, v := range WotoConf.Main.Owners {
+		if v == id {
+			return true
+		}
+	}
+	return false
+}
+
 func GetAppId() string {
 	return WotoConf.Main.AppId
 }

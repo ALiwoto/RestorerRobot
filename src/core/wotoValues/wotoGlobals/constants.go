@@ -1,6 +1,10 @@
 package wotoGlobals
 
 const (
+	AppVersion = "1.0.0"
+)
+
+const (
 	NormalUser UserPermission = iota
 	Stalk
 	Special
