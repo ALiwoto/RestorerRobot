@@ -18,6 +18,25 @@ func GetIdFromPeerClass(p tg.PeerClass) int64 {
 	}
 }
 
+func GetUserIdFromPeerClass(p tg.PeerClass) int64 {
+	peerUser, ok := p.(*tg.PeerUser)
+	if ok {
+		return peerUser.UserID
+	}
+	return 0
+}
+
+func GetEffectiveUserIdFromMessage(msg *tg.Message) int64 {
+	switch {
+	case msg.FromID != nil:
+		return GetUserIdFromPeerClass(msg.FromID)
+	case msg.PeerID != nil:
+		return GetUserIdFromPeerClass(msg.PeerID)
+	}
+
+	return 0
+}
+
 func GetInputUserFromId(id int64) *tg.InputUser {
 	if GetUserFromIdHelper == nil {
 		return nil

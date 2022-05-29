@@ -95,5 +95,5 @@ func GetPrefixes() []rune {
 	if WotoConf != nil && len(WotoConf.Main.CmdPrefixes) != 0 {
 		return WotoConf.Main.CmdPrefixes
 	}
-	return []rune{'!', '>'}
+	return []rune{'!', '/'}
 }

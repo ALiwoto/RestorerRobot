@@ -17,7 +17,7 @@ func main() {
 
 	err := runApp()
 	if err != nil {
-		logging.Fatal("Error running app:", err.Error())
+		logging.Fatal("Error running app: ", err.Error())
 	}
 }
 

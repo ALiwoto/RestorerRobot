@@ -323,6 +323,17 @@ func (c *WotoContainer) GetPrefixes() []rune {
 	return wotoConfig.GetPrefixes()
 }
 
+// GetEffectiveUserID method returns the user-id of the effective user,
+// (for example the person who sent the command/query, etc...)
+func (c *WotoContainer) GetEffectiveUserID() int64 {
+	switch {
+	case c.Message != nil:
+		return tgUtils.GetEffectiveUserIdFromMessage(c.Message)
+		// TODO: add support for other cases...
+	}
+	return 0
+}
+
 func (c *WotoContainer) GetMessageText() string {
 	if c.Message != nil {
 		return c.Message.Message
