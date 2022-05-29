@@ -4,15 +4,15 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"gorm.io/gorm"
 )
 
 var (
-	dbSession    *gorm.DB
-	modelUser    = &UserInfo{}
-	dbMutex      = &sync.Mutex{}
-	userMapMutex = &sync.Mutex{}
-	userDbMap    = make(map[int64]*UserInfo)
+	dbSession *gorm.DB
+	modelUser = &UserInfo{}
+	dbMutex   = &sync.Mutex{}
+	userDbMap = ssg.NewSafeMap[int64, UserInfo]()
 )
 
 var (

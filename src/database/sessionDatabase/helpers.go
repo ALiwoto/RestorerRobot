@@ -13,19 +13,7 @@ import (
 )
 
 func init() {
-	tgUtils.GetUserFromIdHelper = func(id int64) (*tg.InputUser, error) {
-		u, err := GetUserFromId(id)
-		if err != nil {
-			return nil, err
-		}
-		if u == nil {
-			return nil, nil
-		}
-		return &tg.InputUser{
-			UserID:     u.UserId,
-			AccessHash: u.AccessHash,
-		}, nil
-	}
+	tgUtils.GetUserFromIdHelper = GetInputUserFromId
 	tgUtils.SaveTgUser = SaveTgUser
 }
 
@@ -75,9 +63,7 @@ func SaveTgUser(u *tg.User) error {
 
 func SaveUser(id int64, hash int64) error {
 	var u *UserInfo
-	userMapMutex.Lock()
-	u = userDbMap[id]
-	userMapMutex.Unlock()
+	u = userDbMap.Get(id)
 	if u == nil || u.AccessHash != hash {
 		if u == nil {
 			u = &UserInfo{
@@ -101,10 +87,7 @@ func NewUser(u *UserInfo) error {
 	tx.Save(u)
 	tx.Commit()
 	dbMutex.Unlock()
-	u.SetCacheTime()
-	userMapMutex.Lock()
-	userDbMap[u.UserId] = u
-	userMapMutex.Unlock()
+	userDbMap.Add(u.UserId, u)
 	return nil
 }
 
@@ -113,11 +96,8 @@ func GetUserFromId(id int64) (*UserInfo, error) {
 		return nil, ErrNoSession
 	}
 
-	userMapMutex.Lock()
-	u := userDbMap[id]
-	userMapMutex.Unlock()
+	u := userDbMap.Get(id)
 	if u != nil {
-		u.SetCacheTime()
 		return u, nil
 	}
 
@@ -140,10 +120,21 @@ func GetUserFromId(id int64) (*UserInfo, error) {
 		return nil, nil
 	}
 
-	u.SetCacheTime()
-	userMapMutex.Lock()
-	userDbMap[u.UserId] = u
-	userMapMutex.Unlock()
+	userDbMap.Add(u.UserId, u)
 
 	return u, nil
+}
+
+func GetInputUserFromId(id int64) (*tg.InputUser, error) {
+	u, err := GetUserFromId(id)
+	if err != nil {
+		return nil, err
+	}
+	if u == nil {
+		return nil, nil
+	}
+	return &tg.InputUser{
+		UserID:     u.UserId,
+		AccessHash: u.AccessHash,
+	}, nil
 }
