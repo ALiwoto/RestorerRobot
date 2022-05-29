@@ -7,6 +7,10 @@ func GetNormal(value string) WStyle {
 	return s.AppendNormalThis(value)
 }
 
+func GetEmpty() WStyle {
+	return &wotoStyling{}
+}
+
 func GetBold(value string) WStyle {
 	s := &wotoStyling{}
 	return s.AppendBoldThis(value)

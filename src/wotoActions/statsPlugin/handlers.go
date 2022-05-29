@@ -17,7 +17,8 @@ func statusHandler(container *em.WotoContainer) error {
 	// input := tgUtils.GetInputUserFromId(userId)
 	// print(input)
 
-	txt := wotoStyle.GetBold("@" + wotoGlobals.Self.Username + ":")
+	txt := wotoStyle.GetEmpty()
+	txt.Bold("🔹 @" + wotoGlobals.Self.Username + "'s stats:")
 	txt.Bold("\n • Version: ").Mono(wotoGlobals.AppVersion)
 	txt.AppendBoldThis("\n • Status: ")
 	txt.AppendMonoThis("Active")
