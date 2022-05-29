@@ -12,6 +12,9 @@ import (
 )
 
 func fetchGitStats(md wotoStyle.WStyle) {
+	md.Normal("\nℹ️ ").Link("Git ", gitBaseUrl)
+	md.Bold("Status:")
+
 	rawGit, ok := getRawGit(md)
 	if !ok {
 		return
@@ -48,9 +51,6 @@ func fetchGitStats(md wotoStyle.WStyle) {
 	}
 	vsInt := upstream - local
 	commitUrl := gitBaseUrl + "/commit/" + longGit
-
-	md.Normal("ℹ️ ").Link("Git ", gitBaseUrl)
-	md.Bold("Status:")
 	md.Normal("\n• Current commit: ").Link(shortGit, commitUrl)
 	md.Normal("\n• Running behind by ").Mono(strconv.Itoa(vsInt))
 	md.Normal(" commits\n\n")
