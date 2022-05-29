@@ -6,7 +6,7 @@ buildApp()
 
 	echo -e "building botBinary, please wait a bit..."
 
-	go build -o wotoubBinary
+	go build -o botBinary
 }
 
 runApp()
@@ -14,9 +14,9 @@ runApp()
 	# clear the screen (the terminal)
 	clear
 
-	echo -e "we are done building it,\n->now running the wotoubBinary...\n-------------------"
+	echo -e "we are done building it,\n->now running the botBinary...\n-------------------"
 
-	./wotoubBinary
+	./botBinary
 }
 
 testApp()

@@ -326,7 +326,7 @@ func (c *WotoContainer) GetSenderHelper() *message.Sender {
 }
 
 func (c *WotoContainer) UploadFileToChatByPath(filename string, chatId int64, caption wotoStyle.WStyle) error {
-	uploader := uploader.NewUploader(wg.API)
+	uploader := uploader.NewUploader(wg.API).WithThreads(60)
 	sender := message.NewSender(wg.API).WithUploader(uploader)
 	upload, err := uploader.FromPath(c.Ctx(), filename)
 	if err != nil {

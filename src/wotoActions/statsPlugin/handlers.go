@@ -3,6 +3,7 @@ package statsPlugin
 import (
 	"log"
 
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
 	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
@@ -20,12 +21,16 @@ func statusHandler(container *em.WotoContainer) error {
 	print(input)
 
 	txt := wotoStyle.GetBold("@" + wotoGlobals.Self.Username + ":")
-	txt.AppendMonoThis("v1.0.1")
+	txt.Bold("\n • Version: v1.0.1")
 	txt.AppendBoldThis("\n • Status: ")
 	txt.AppendMonoThis("Active")
 	container.ReplyStyledText(txt)
+
+	// err := container.UploadFileToChatByPath("spy.mkv", -1001695105982, wotoStyle.GetBold("hi"))
 	err := container.UploadFileToChatByPath("run.sh", -1001695105982, wotoStyle.GetBold("hi"))
-	print(err)
+	if err != nil {
+		logging.Error(err)
+	}
 
 	//wv.SenderHelper.Reply(*container.Entities, container.GetAnswerable()).Text(container.Ctx(), "hello")
 	//sender.Resolve("1117157532").Text(wv.GCtx, "Hello")

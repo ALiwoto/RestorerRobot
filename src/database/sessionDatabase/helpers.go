@@ -131,7 +131,7 @@ func GetPeerInfoFromId(id int64) (*wg.PeerInfo, error) {
 
 	u = &wg.PeerInfo{}
 	dbMutex.Lock()
-	dbSession.Model(modelUser).Where("user_id = ?", id).Take(u)
+	dbSession.Model(modelUser).Where("peer_id = ?", id).Take(u)
 	dbMutex.Unlock()
 	if u.PeerId != id || u.AccessHash == 0 {
 		if wotoValues.IsRealOwner(id) {
