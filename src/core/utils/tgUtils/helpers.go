@@ -18,6 +18,39 @@ func GetIdFromPeerClass(p tg.PeerClass) int64 {
 	}
 }
 
+func GetInputPeerClass(id int64) (tg.InputPeerClass, error) {
+	info, err := GetInputPeerInfo(id)
+	if err != nil {
+		return nil, err
+	}
+
+	switch info.PeerType {
+	case wg.PeerTypeEmpty:
+		return &tg.InputPeerEmpty{}, nil
+	case wg.PeerTypeSelf:
+		return &tg.InputPeerSelf{}, nil
+	case wg.PeerTypeChat:
+		return &tg.InputPeerChat{
+			ChatID: info.GetRealID(),
+		}, nil
+	case wg.PeerTypeChannel:
+		return &tg.InputPeerChannel{
+			ChannelID:  info.GetRealID(),
+			AccessHash: info.AccessHash,
+		}, nil
+	case wg.PeerTypeUser:
+		return &tg.InputPeerUser{
+			UserID:     info.GetRealID(),
+			AccessHash: info.AccessHash,
+		}, nil
+	case wg.PeerTypeUserFromMessage:
+		return &tg.InputPeerUserFromMessage{
+			UserID: info.GetRealID(),
+		}, nil
+	}
+	return nil, nil
+}
+
 func GetUserIdFromPeerClass(p tg.PeerClass) int64 {
 	peerUser, ok := p.(*tg.PeerUser)
 	if ok {

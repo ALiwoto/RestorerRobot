@@ -4,15 +4,16 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"gorm.io/gorm"
 )
 
 var (
 	dbSession *gorm.DB
-	modelUser = &UserInfo{}
+	modelUser = &wotoGlobals.PeerInfo{}
 	dbMutex   = &sync.Mutex{}
-	userDbMap = ssg.NewSafeMap[int64, UserInfo]()
+	peerDbMap = ssg.NewSafeMap[int64, wotoGlobals.PeerInfo]()
 )
 
 var (

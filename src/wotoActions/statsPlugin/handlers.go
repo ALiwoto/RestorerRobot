@@ -15,6 +15,7 @@ func statusHandler(container *em.WotoContainer) error {
 	if userId != 1341091260 {
 		return nil
 	}
+
 	input := tgUtils.GetInputUserFromId(userId)
 	print(input)
 
@@ -23,6 +24,8 @@ func statusHandler(container *em.WotoContainer) error {
 	txt.AppendBoldThis("\n • Status: ")
 	txt.AppendMonoThis("Active")
 	container.ReplyStyledText(txt)
+	err := container.UploadFileToChatByPath("run.sh", -1001695105982, wotoStyle.GetBold("hi"))
+	print(err)
 
 	//wv.SenderHelper.Reply(*container.Entities, container.GetAnswerable()).Text(container.Ctx(), "hello")
 	//sender.Resolve("1117157532").Text(wv.GCtx, "Hello")

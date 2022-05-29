@@ -2,6 +2,7 @@ package entryManager
 
 import (
 	"context"
+	"path"
 	"strings"
 	"sync"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/gotd/td/telegram"
 	"github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/telegram/message/styling"
+	"github.com/gotd/td/telegram/uploader"
 	"github.com/gotd/td/tg"
 )
 
@@ -317,6 +319,37 @@ func (c *WotoContainer) GetSendBuilder() *message.RequestBuilder {
 
 func (c *WotoContainer) GetEditBuilder() *message.EditMessageBuilder {
 	return wg.SenderHelper.Answer(*c.Entities, c.GetAnswerable()).Edit(c.Message.ID)
+}
+
+func (c *WotoContainer) GetSenderHelper() *message.Sender {
+	return wg.SenderHelper
+}
+
+func (c *WotoContainer) UploadFileToChatByPath(filename string, chatId int64, caption wotoStyle.WStyle) error {
+	uploader := uploader.NewUploader(wg.API)
+	sender := message.NewSender(wg.API).WithUploader(uploader)
+	upload, err := uploader.FromPath(c.Ctx(), filename)
+	if err != nil {
+		return err
+	}
+
+	builder := message.UploadedDocument(upload, caption.GetStylingArray()...)
+	builder = builder.Filename(path.Base(filename))
+	builder.ForceFile(true)
+
+	inputTarget, err := tgUtils.GetInputPeerClass(chatId)
+	if err != nil {
+		return err
+	}
+
+	target := sender.To(inputTarget)
+
+	// Sending message with media.
+	if _, err := target.Media(c.Ctx(), builder); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (c *WotoContainer) GetPrefixes() []rune {

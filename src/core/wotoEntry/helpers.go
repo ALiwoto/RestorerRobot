@@ -29,7 +29,10 @@ func MainUpdateEntry(ctx context.Context, u tg.UpdatesClass) error {
 	case *tg.Updates: // updates#74ae4240
 		if len(v.Users) > 0 {
 			cacheUsers(v.Users)
-			return nil
+		}
+
+		if len(v.Chats) > 0 {
+			cacheChats(v.Chats)
 		}
 		//if len(v.Updates) != 0 {
 		//	for _, update := range v.Updates {
@@ -262,6 +265,21 @@ func cacheUsers(users []tg.UserClass) {
 		if u != nil {
 			cacheUser(u)
 		}
+	}
+}
+
+func cacheChats(chats []tg.ChatClass) {
+	for _, current := range chats {
+		if current != nil {
+			cacheChat(current)
+		}
+	}
+}
+
+func cacheChat(c tg.ChatClass) {
+	channel, ok := c.(*tg.Channel)
+	if ok && channel.ID != 0 && channel.AccessHash != 0 {
+		_ = sessionDatabase.SaveTgChannel(channel)
 	}
 }
 

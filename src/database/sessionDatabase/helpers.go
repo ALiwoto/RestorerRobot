@@ -1,11 +1,14 @@
 package sessionDatabase
 
 import (
+	"strings"
+
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/gotd/td/tg"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -14,6 +17,7 @@ import (
 
 func init() {
 	tgUtils.GetUserFromIdHelper = GetInputUserFromId
+	tgUtils.GetInputPeerInfo = GetPeerInfoFromId
 	tgUtils.SaveTgUser = SaveTgUser
 }
 
@@ -61,56 +65,80 @@ func SaveTgUser(u *tg.User) error {
 	return SaveUser(u.ID, u.AccessHash)
 }
 
-func SaveUser(id int64, hash int64) error {
-	var u *UserInfo
-	u = userDbMap.Get(id)
+func SaveTgChannel(ch *tg.Channel) error {
+	// we will be adding -100 to the channel id
+	idStr := ssg.ToBase10(ch.ID)
+	if !strings.HasPrefix(idStr, "-100") {
+		idStr = "-100" + idStr
+	}
+
+	return SaveChannel(ssg.ToInt64(idStr), ch.AccessHash)
+}
+
+func SaveChannel(id int64, hash int64) error {
+	var u *wg.PeerInfo
+	u = peerDbMap.Get(id)
 	if u == nil || u.AccessHash != hash {
 		if u == nil {
-			u = &UserInfo{
-				UserId:     id,
+			u = &wg.PeerInfo{
+				PeerId:     id,
 				AccessHash: hash,
+				PeerType:   wg.PeerTypeChannel,
 			}
 		}
 
-		if wotoValues.IsRealOwner(id) {
-			u.Permission = wotoGlobals.Owner
-		}
-
-		return NewUser(u)
+		return NewPeerInfo(u)
 	}
 	return nil
 }
 
-func NewUser(u *UserInfo) error {
+func SaveUser(id int64, hash int64) error {
+	var u *wg.PeerInfo
+	u = peerDbMap.Get(id)
+	if u == nil || u.AccessHash != hash {
+		if u == nil {
+			u = &wg.PeerInfo{
+				PeerId:     id,
+				AccessHash: hash,
+				PeerType:   wg.PeerTypeUser,
+			}
+		}
+
+		return NewPeerInfo(u)
+	}
+	return nil
+}
+
+func NewPeerInfo(u *wg.PeerInfo) error {
 	dbMutex.Lock()
 	tx := dbSession.Begin()
 	tx.Save(u)
 	tx.Commit()
 	dbMutex.Unlock()
-	userDbMap.Add(u.UserId, u)
+	peerDbMap.Add(u.PeerId, u)
 	return nil
 }
 
-func GetUserFromId(id int64) (*UserInfo, error) {
+func GetPeerInfoFromId(id int64) (*wg.PeerInfo, error) {
 	if dbSession == nil {
 		return nil, ErrNoSession
 	}
 
-	u := userDbMap.Get(id)
+	u := peerDbMap.Get(id)
 	if u != nil {
 		return u, nil
 	}
 
-	u = &UserInfo{}
+	u = &wg.PeerInfo{}
 	dbMutex.Lock()
 	dbSession.Model(modelUser).Where("user_id = ?", id).Take(u)
 	dbMutex.Unlock()
-	if u.UserId != id || u.AccessHash == 0 {
+	if u.PeerId != id || u.AccessHash == 0 {
 		if wotoValues.IsRealOwner(id) {
-			u.Permission = wotoGlobals.Owner
-			u.AccessHash = wotoGlobals.Self.AccessHash
-			u.UserId = id
-			err := NewUser(u)
+			u.AccessHash = wg.Self.AccessHash
+			u.PeerId = id
+			u.PeerType = wg.PeerTypeUser
+			err := NewPeerInfo(u)
 			if err != nil {
 				return nil, err
 			}
@@ -120,13 +148,13 @@ func GetUserFromId(id int64) (*UserInfo, error) {
 		return nil, nil
 	}
 
-	userDbMap.Add(u.UserId, u)
+	peerDbMap.Add(u.PeerId, u)
 
 	return u, nil
 }
 
 func GetInputUserFromId(id int64) (*tg.InputUser, error) {
-	u, err := GetUserFromId(id)
+	u, err := GetPeerInfoFromId(id)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +162,7 @@ func GetInputUserFromId(id int64) (*tg.InputUser, error) {
 		return nil, nil
 	}
 	return &tg.InputUser{
-		UserID:     u.UserId,
+		UserID:     u.PeerId,
 		AccessHash: u.AccessHash,
 	}, nil
 }
