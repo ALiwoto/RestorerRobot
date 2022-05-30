@@ -2,10 +2,15 @@ package backupUtils
 
 import (
 	"archive/zip"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/ssg/ssg"
+	fErrors "github.com/go-faster/errors"
 )
 
 // BackupDatabase backups a database using its url to the specified filename
@@ -13,6 +18,19 @@ import (
 // currently only "sql" and "dump" types are supported for the third
 // argument.
 func BackupDatabase(url, filename, bType string) error {
+	backupCommand := wotoConfig.GetPgDumpCommand() + " -d " + url + " "
+	if bType == wotoConfig.BackupTypeSQL {
+		backupCommand += ">> " + filename
+	} else if bType == wotoConfig.BackupTypeDump {
+		backupCommand += "> " + filename
+	} else {
+		return errors.New("unsupported backup type")
+	}
+
+	result := ssg.RunCommand(backupCommand)
+	if result.Error != nil {
+		return fErrors.Wrap(result.Error, result.Stderr+result.Stdout)
+	}
 
 	return nil
 }

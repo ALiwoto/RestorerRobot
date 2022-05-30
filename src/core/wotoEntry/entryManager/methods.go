@@ -29,7 +29,7 @@ func (m *EntryManager) GetEntry(name string) *entry {
 		m.entryMutex = &sync.Mutex{}
 	}
 	m.entryMutex.Lock()
-	e := m.entryMap[name]
+	e := m.entryMap[strings.ToLower(name)]
 	m.entryMutex.Unlock()
 	return e
 }
@@ -38,8 +38,9 @@ func (m *EntryManager) AddEntry(name string, e *entry) {
 	if m.entryMutex == nil {
 		m.entryMutex = &sync.Mutex{}
 	}
+
 	m.entryMutex.Lock()
-	m.entryMap[name] = e
+	m.entryMap[strings.ToLower(name)] = e
 	m.entryMutex.Unlock()
 }
 
@@ -51,7 +52,14 @@ func (m *EntryManager) AddHandlers(name string, h ...MessageHandler) *entry {
 	}
 
 	e.internalCondition = func(message *tg.Message) bool {
-		return len(message.Message) > 1 && strings.HasPrefix(message.Message[1:], name)
+		if len(message.Message) < 2 {
+			return false
+		}
+		if e.CaseSensitive {
+			return strings.HasPrefix(message.Message[1:], name)
+		}
+
+		return strings.HasPrefix(message.Message[1:], strings.ToLower(name))
 	}
 
 	m.AddEntry(name, e)
@@ -336,9 +344,11 @@ func (c *WotoContainer) UploadFileToChatByPath(filename string, opts *UploadDocu
 	if err != nil {
 		return err
 	}
-	caption := opts.Caption
+	if opts.Caption == nil {
+		opts.Caption = wotoStyle.GetEmpty()
+	}
 
-	builder := message.UploadedDocument(upload, caption.GetStylingArray()...)
+	builder := message.UploadedDocument(upload, opts.Caption.GetStylingArray()...)
 	builder = builder.Filename(path.Base(filename))
 	builder.ForceFile(true)
 
@@ -367,9 +377,11 @@ func (c *WotoContainer) UploadFileToChatsByPath(filename string, opts *UploadDoc
 	if err != nil {
 		return err
 	}
-	caption := opts.Caption
+	if opts.Caption == nil {
+		opts.Caption = wotoStyle.GetEmpty()
+	}
 
-	builder := message.UploadedDocument(upload, caption.GetStylingArray()...)
+	builder := message.UploadedDocument(upload, opts.Caption.GetStylingArray()...)
 	builder = builder.Filename(path.Base(filename))
 	builder.ForceFile(true)
 

@@ -21,6 +21,7 @@ type EntryManager struct {
 }
 
 type entry struct {
+	CaseSensitive bool
 	enabled       bool
 	restrictUsers bool
 	UniqueName    string

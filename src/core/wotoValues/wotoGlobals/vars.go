@@ -2,6 +2,7 @@ package wotoGlobals
 
 import (
 	"context"
+	"errors"
 
 	"github.com/gotd/td/telegram"
 	tgMessage "github.com/gotd/td/telegram/message"
@@ -16,4 +17,8 @@ var (
 	Self          *tg.User
 	UpdateManager *updates.Manager
 	SenderHelper  *tgMessage.Sender
+)
+
+var (
+	ErrPeerIdInvalid = errors.New("[400 PEER_ID_INVALID] - The peer id being used is invalid or not known yet. Make sure you meet the peer before interacting with it")
 )

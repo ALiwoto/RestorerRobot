@@ -23,6 +23,7 @@ func LoadConfigFromFile(fileName string) error {
 	}
 
 	WotoConf = config
+	PrepareDirectories()
 	return nil
 }
 
@@ -51,6 +52,19 @@ func PrepareVariables() error {
 	}
 
 	return nil
+}
+
+func PrepareDirectories() {
+	makeSureDirExists(WotoConf.Main.BackupsBaseDir)
+	for _, current := range WotoConf.Sections {
+		makeSureDirExists(WotoConf.Main.BackupsBaseDir + "/" + current.GetSectionName())
+	}
+}
+
+func makeSureDirExists(dirName string) {
+	if _, err := os.Stat(dirName); os.IsNotExist(err) {
+		os.MkdirAll(dirName, 0755)
+	}
 }
 
 func getDefaultSessionPath() string {
@@ -112,8 +126,16 @@ func GetGlobalLogChannels() []int64 {
 	return WotoConf.Main.GlobalLogChannels
 }
 
+func GetPgDumpCommand() string {
+	if WotoConf.Main.PgDumpCommand == "" {
+		return "pg_dump"
+	}
+
+	return WotoConf.Main.PgDumpCommand
+}
+
 func GetSessionPath() string {
-	if WotoConf != nil && len(WotoConf.Main.SessionFile) > 5 {
+	if len(WotoConf.Main.SessionFile) > 5 {
 		return WotoConf.Main.SessionFile
 	}
 	return getDefaultSessionPath()

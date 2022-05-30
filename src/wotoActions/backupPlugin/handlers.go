@@ -80,11 +80,17 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		}
 		_ = os.Remove(sourceFileName)
 
-		container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
+		err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
 			ChatIDs:    targetChats,
 			Goroutines: 60,
 			// Caption: "TODO",
 		})
+		if err != nil {
+			_, _ = container.ReplyText("Failed to upload backup file" + err.Error())
+			return em.ErrEndGroups
+		}
+
+		return em.ErrEndGroups
 	}
 
 	return em.ErrEndGroups

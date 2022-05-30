@@ -24,6 +24,10 @@ func GetInputPeerClass(id int64) (tg.InputPeerClass, error) {
 		return nil, err
 	}
 
+	if info == nil {
+		return nil, wg.ErrPeerIdInvalid
+	}
+
 	switch info.PeerType {
 	case wg.PeerTypeEmpty:
 		return &tg.InputPeerEmpty{}, nil
