@@ -6,7 +6,7 @@ Telegram's max limit for uploading files is 2GB, which means the compressed file
 <hr/>
 
 ## how to configure the project
-Configuration file is called `config.ini`, it has a structure such as this:
+Configuration file is called `config.ini`, it has a structure such as this (for a more completed sample file, please visit [config.sample.ini](config.sample.ini) file):
 ```ini
 [main]
 app_id = 12345
@@ -97,4 +97,9 @@ or you can also pass it direct db url:
 `/forcebackup postgresql://Username:Password@localhost:5432/DatabaseName`
 
 <hr/>
+
+
+<h2 align="middle"> 
+    - By <a href=https://t.me/Kaizoku> Kaizoku </a>
+</h2>
 
