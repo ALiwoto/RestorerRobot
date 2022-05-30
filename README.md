@@ -17,23 +17,31 @@ field2 = value2
 [SaitamaRobot]
 db_url = postgresql://Username:Password@localhost:5432/DatabaseName
 backup_interval = 10
-some_field = 1233424
+# additional log channels, backup file will be sent to these channels
+log_channels = -10012548, -1005487
+backup_type = dump
 
 [KigyoRobot]
 db_url = postgresql://Username:Password@localhost:5432/DatabaseName
 backup_interval = 10
-some_field = 78797878
+# additional log channels, backup file will be sent to these channels
+log_channels = -10012548, -1005487
+backup_type = dump
 
 [PsychoPass]
 db_url = postgresql://Username:Password@localhost:5432/DatabaseName
 backup_interval = 15
-some_field = 86586786
+# additional log channels, backup file will be sent to these channels
+log_channels = -10012548, -1005487
+backup_type = dump
 
 [AllMightRobot]
 db_url = postgresql://Username:Password@localhost:5432/DatabaseName
 # backup interval in days
 backup_interval = 20
-some_field = 86586786
+# additional log channels, backup file will be sent to these channels
+log_channels = -10012548, -1005487
+backup_type = dump
 
 ```
 
@@ -47,15 +55,26 @@ The field `db_url` is shouldn't necessary be hosted on localhost, as long as it'
 
 <hr/>
 
-# Scheduled backups
+### Log channels
+There are two types of log channels: global log channels and separated log channels.
+All backup files will be sent to global log channels, regardless of when, who and why the bot is taking backup. Those who have access to those log channels will be able to download all of backup files shared by this bot.
 
-There will be a time interval between backing up each project. For example you can set backup time-interval of `AllMightRobot` project to 20 (days), that way if 20 days passes from last time `AllMightRobot`'s db got backed up, bot will try to take next backup.
+Separated log channels are related to their own project, another projects' backup files will not be shared in those log channels. For example consider bot is trying to get backup from SaitamaRobot's database, the compressed file will be sent to log-channel and SaitamaRobot's separated log-channel (`log_channels` config variable can point to a channel, group or a user).
+
+In the case a user uses `/forcebackup` command, the compressed file will be sent to log-channels AND the user's PM.
+
+<hr/>
+
+### Scheduled backups
+
+There will be a time interval between backing up each project. For example you can set backup time-interval of `AllMightRobot` project to 20 (days), that way if 20 days passes from last time `AllMightRobot`'s db got backed up, bot will try to take next backup automatically.
+And then the compressed backup file will be sent to the log channel.
 
 This part is still incomplete.
 
 <hr/>
 
-# Force backup
+### Force backup
 
 Owners can forcefully make the bot to backup and upload the compressed file to telegram. Please do notice that the file will be also sent to global log channels, if you don't want this, consider using `--private` flag in your command.
 
