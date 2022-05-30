@@ -8,6 +8,8 @@ A bot written in golang using gotd library for backing up databases and uploadin
 Configuration file is called `config.ini`, it has a structure such as this:
 ```ini
 [main]
+app_id = 12345
+app_hash = abcd
 bot_token = 1234324:abcd
 field1 = value1
 field2 = value2
