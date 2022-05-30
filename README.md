@@ -1,6 +1,7 @@
 # <h1 align="middle"> RestorerRobot </h1>
 
-A bot written in golang using gotd library for backing up databases and uploading them to telegram logging channels.
+A bot written in golang using mtproto for backing up databases and uploading them to telegram logging channels.
+Telegram's max limit for uploading files is 2GB, which means the compressed file (.zip)'s size that bot is trying to upload to telegram should not be more than 2GB.
 
 <hr/>
 
@@ -11,8 +12,7 @@ Configuration file is called `config.ini`, it has a structure such as this:
 app_id = 12345
 app_hash = abcd
 bot_token = 1234324:abcd
-field1 = value1
-field2 = value2
+backups_base_directory_path = backups
 
 [SaitamaRobot]
 db_url = postgresql://Username:Password@localhost:5432/DatabaseName
@@ -71,6 +71,16 @@ There will be a time interval between backing up each project. For example you c
 And then the compressed backup file will be sent to the log channel.
 
 This part is still incomplete.
+
+<hr/>
+
+### Backup types
+This bot currently supports 2 types of backup file output:
+- .dump
+- .sql
+
+You can set `backup_type` variable in `config.ini` file to either of them (please don't include '.').
+Default backup type is set to `sql`.
 
 <hr/>
 
