@@ -98,7 +98,9 @@ func GetSectionValueByName(name string) *ValueSection {
 
 func GetBaseDirForBackup(value string) string {
 	p := string(os.PathSeparator)
-	return "backups" + p + value + p
+	baseDir := WotoConf.Main.BackupsBaseDir + p + value
+	makeSureDirExists(baseDir)
+	return baseDir + p
 }
 
 func IsOwner(id int64) bool {

@@ -2,6 +2,7 @@ package backupPlugin
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/backupUtils"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
@@ -90,6 +91,37 @@ func forceBackupHandler(container *em.WotoContainer) error {
 			return em.ErrEndGroups
 		}
 
+		return em.ErrEndGroups
+	}
+
+	// if we are here, then we have a url
+	theUrl = name
+	sectionName := filepath.Base(theUrl) // dummy sectionName
+	originFileName = wotoConfig.GetBaseDirForBackup(sectionName) +
+		backupUtils.GenerateFileNameFromValue(sectionName)
+	sourceFileName = originFileName + "." + bType
+	finalFileName = originFileName + wotoConfig.CompressedFileExtension
+	targetChats = append(targetChats, userId)
+	err = backupUtils.BackupDatabase(theUrl, sourceFileName, bType)
+	if err != nil {
+		_, _ = container.ReplyError("Failed to backup database", err)
+		return em.ErrEndGroups
+	}
+
+	err = backupUtils.ZipSource(sourceFileName, finalFileName)
+	if err != nil {
+		_, _ = container.ReplyError("Failed to zip backup file", err)
+		return em.ErrEndGroups
+	}
+	_ = os.Remove(sourceFileName)
+
+	err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
+		ChatIDs:    targetChats,
+		Goroutines: 60,
+		// Caption: "TODO",
+	})
+	if err != nil {
+		_, _ = container.ReplyText("Failed to upload backup file" + err.Error())
 		return em.ErrEndGroups
 	}
 
