@@ -34,3 +34,24 @@ config.ini
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# backup directory
+backups/*
+
+# other stuff that we might store for testing
+*.mkv
+*.mp4
+*.mp3
+*.zip
+*.sql
+*.tar
+*.gz
+*.bz2
+*.7z
+*.iso
+*.dmg
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm

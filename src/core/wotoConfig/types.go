@@ -14,5 +14,6 @@ type MainConfigSection struct {
 type ValueSection struct {
 	DbUrl       string  `key:"db_url"`
 	LogChannels []int64 `key:"log_channels"`
+	BackupType  string  `key:"backup_type"`
 	sectionName string
 }

@@ -82,6 +82,11 @@ func GetSectionValueByName(name string) *ValueSection {
 	return nil
 }
 
+func GetBaseDirForBackup(value string) string {
+	p := string(os.PathSeparator)
+	return "backups" + p + value + p
+}
+
 func IsOwner(id int64) bool {
 	for _, v := range WotoConf.Main.Owners {
 		if v == id {
@@ -101,6 +106,10 @@ func GetBotToken() string {
 
 func GetAppHash() string {
 	return WotoConf.Main.AppHash
+}
+
+func GetGlobalLogChannels() []int64 {
+	return WotoConf.Main.GlobalLogChannels
 }
 
 func GetSessionPath() string {

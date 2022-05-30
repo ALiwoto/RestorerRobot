@@ -213,6 +213,10 @@ func (c *WotoContainer) ReplyText(text string) (tg.UpdatesClass, error) {
 	return c.GetReplyBuilder().Text(gCtx, text)
 }
 
+func (c *WotoContainer) ReplyError(description string, err error) (tg.UpdatesClass, error) {
+	return c.ReplyStyledText(wotoStyle.GetBold(description).Normal(": " + err.Error()))
+}
+
 func (c *WotoContainer) ReplyStrikeText(text string) (tg.UpdatesClass, error) {
 	return c.GetReplyBuilder().StyledText(gCtx, styling.Strike(text))
 }
@@ -325,28 +329,62 @@ func (c *WotoContainer) GetSenderHelper() *message.Sender {
 	return wg.SenderHelper
 }
 
-func (c *WotoContainer) UploadFileToChatByPath(filename string, chatId int64, caption wotoStyle.WStyle) error {
-	uploader := uploader.NewUploader(wg.API).WithThreads(60)
+func (c *WotoContainer) UploadFileToChatByPath(filename string, opts *UploadDocumentOptions) error {
+	uploader := uploader.NewUploader(wg.API).WithThreads(opts.Goroutines)
 	sender := message.NewSender(wg.API).WithUploader(uploader)
 	upload, err := uploader.FromPath(c.Ctx(), filename)
 	if err != nil {
 		return err
 	}
+	caption := opts.Caption
 
 	builder := message.UploadedDocument(upload, caption.GetStylingArray()...)
 	builder = builder.Filename(path.Base(filename))
 	builder.ForceFile(true)
 
-	inputTarget, err := tgUtils.GetInputPeerClass(chatId)
+	inputTarget, err := tgUtils.GetInputPeerClass(opts.ChatID)
 	if err != nil {
 		return err
 	}
 
 	target := sender.To(inputTarget)
+	if opts.ReplyToMessageId != 0 {
+		_ = target.Reply(opts.ReplyToMessageId)
+	}
 
 	// Sending message with media.
 	if _, err := target.Media(c.Ctx(), builder); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (c *WotoContainer) UploadFileToChatsByPath(filename string, opts *UploadDocumentToChatsOptions) error {
+	uploader := uploader.NewUploader(wg.API).WithThreads(opts.Goroutines)
+	sender := message.NewSender(wg.API).WithUploader(uploader)
+	upload, err := uploader.FromPath(c.Ctx(), filename)
+	if err != nil {
+		return err
+	}
+	caption := opts.Caption
+
+	builder := message.UploadedDocument(upload, caption.GetStylingArray()...)
+	builder = builder.Filename(path.Base(filename))
+	builder.ForceFile(true)
+
+	for _, chatID := range opts.ChatIDs {
+		inputTarget, err := tgUtils.GetInputPeerClass(chatID)
+		if err != nil {
+			return err
+		}
+
+		target := sender.To(inputTarget)
+
+		// Sending message with media.
+		if _, err := target.Media(c.Ctx(), builder); err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -378,6 +416,10 @@ func (c *WotoContainer) GetMessageText() string {
 func (c *WotoContainer) Args() *argparser.EventArgs {
 	args, _ := argparser.ParseArg(c.GetMessageText(), c.GetPrefixes())
 	return args
+}
+
+func (c *WotoContainer) GetArgs() (*argparser.EventArgs, error) {
+	return argparser.ParseArg(c.GetMessageText(), c.GetPrefixes())
 }
 
 func (c *WotoContainer) GetClient() *telegram.Client {

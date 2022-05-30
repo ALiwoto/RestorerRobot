@@ -3,6 +3,7 @@ package entryManager
 import (
 	"sync"
 
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
 	"github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/tg"
 )
@@ -29,6 +30,21 @@ type entry struct {
 	internalCondition MessageFilter
 	// filters field. all filters should return if handlers are going to run.
 	filters []MessageFilter
+}
+
+type UploadDocumentOptions struct {
+	ChatID           int64
+	FileName         string
+	Goroutines       int
+	Caption          wotoStyle.WStyle
+	ReplyToMessageId int
+}
+
+type UploadDocumentToChatsOptions struct {
+	ChatIDs    []int64
+	FileName   string
+	Goroutines int
+	Caption    wotoStyle.WStyle
 }
 
 type WotoContainer struct {
