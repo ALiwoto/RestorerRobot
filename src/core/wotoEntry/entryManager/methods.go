@@ -382,8 +382,12 @@ func (c *WotoContainer) UploadFileToChatsByPath(filename string, opts *UploadDoc
 	}
 
 	builder := message.UploadedDocument(upload, opts.Caption.GetStylingArray()...)
-	builder = builder.Filename(path.Base(filename))
-	builder.ForceFile(true)
+	if opts.FileName == "" {
+		// user-provided file name is empty, fallback to using path.Base
+		builder = builder.Filename(path.Base(filename))
+	} else {
+		builder.ForceFile(true).Filename(opts.FileName)
+	}
 
 	for _, chatID := range opts.ChatIDs {
 		inputTarget, err := tgUtils.GetInputPeerClass(chatID)
