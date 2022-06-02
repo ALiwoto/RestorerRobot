@@ -110,7 +110,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 
 		err = backupUtils.ZipSource(sourceFileName, finalFileName)
 		if err != nil {
-			_, _ = container.ReplyText("Failed to zip backup file" + err.Error())
+			_, _ = container.ReplyError("Failed to zip backup file", err)
 			return em.ErrEndGroups
 		}
 		_ = os.Remove(sourceFileName)
@@ -121,7 +121,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 			Caption:    backupUtils.GenerateCaption(captionOptions),
 		})
 		if err != nil {
-			_, _ = container.ReplyText("Failed to upload backup file" + err.Error())
+			_, _ = container.ReplyError("Failed to upload backup file", err)
 			return em.ErrEndGroups
 		}
 
