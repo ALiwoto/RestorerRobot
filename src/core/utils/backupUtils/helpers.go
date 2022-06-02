@@ -3,12 +3,14 @@ package backupUtils
 import (
 	"archive/zip"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	fErrors "github.com/go-faster/errors"
 )
@@ -90,6 +92,53 @@ func ZipSource(source, target string) error {
 		_, err = io.Copy(headerWriter, f)
 		return err
 	})
+}
+
+// GenerateCaption generates caption for the backup using the specified options.
+func GenerateCaption(opts *GenerateCaptionOptions) wotoStyle.WStyle {
+	md := wotoStyle.GetBold("Config name: ").Mono(opts.ConfigName)
+	md.Bold("\n Type: ").Mono(opts.BackupInitType)
+	md.Bold("\n Initiated by: ").Mono(opts.InitiatedBy)
+	if opts.UserId != 0 {
+		md.Bold("\n ID: ").Mono(ssg.ToBase10(opts.UserId))
+	}
+
+	if !opts.DateTime.IsZero() {
+		// format should be like: Wed-01-06-2022 11:39 AM
+		md.Bold("\n Date Time: ").Mono(opts.DateTime.Format("Mon-01-02-2006 03:04 PM"))
+	}
+
+	if opts.FileSize != "" {
+		startingTitle := "File"
+		if opts.BackupFormat != "" {
+			startingTitle = opts.BackupFormat
+		}
+
+		md.Bold("\n " + startingTitle + " size: ").Mono(opts.FileSize)
+	}
+
+	return md
+}
+
+func FormatFileSize(size int64) string {
+	var sizeSuffix string
+	var sizeValue float64
+
+	if size > 1024*1024*1024 {
+		sizeSuffix = "GB"
+		sizeValue = float64(size) / 1024 / 1024 / 1024
+	} else if size > 1024*1024 {
+		sizeSuffix = "MB"
+		sizeValue = float64(size) / 1024 / 1024
+	} else if size > 1024 {
+		sizeSuffix = "KB"
+		sizeValue = float64(size) / 1024
+	} else {
+		sizeSuffix = "B"
+		sizeValue = float64(size)
+	}
+
+	return fmt.Sprintf("%g", sizeValue) + " " + sizeSuffix
 }
 
 // GenerateFileNameFromOrigin creates a filename from the origin,

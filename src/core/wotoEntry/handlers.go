@@ -4,12 +4,14 @@ import (
 	"context"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/gotd/td/tg"
 )
 
 func NewMessageHandler(ctx context.Context, entities tg.Entities, u *tg.UpdateNewMessage) error {
 	if u.Message != nil {
 		container := &entryManager.WotoContainer{
+			TelegramClient:   wotoGlobals.Client,
 			OriginMessage:    u.Message,
 			Update:           u,
 			UpdateNewMessage: u,
@@ -24,6 +26,7 @@ func NewMessageHandler(ctx context.Context, entities tg.Entities, u *tg.UpdateNe
 func NewChannelMessageHandler(ctx context.Context, entities tg.Entities, u *tg.UpdateNewChannelMessage) error {
 	if u.Message != nil {
 		container := &entryManager.WotoContainer{
+			TelegramClient:          wotoGlobals.Client,
 			OriginMessage:           u.Message,
 			Update:                  u,
 			UpdateNewChannelMessage: u,
@@ -38,6 +41,7 @@ func NewChannelMessageHandler(ctx context.Context, entities tg.Entities, u *tg.U
 func NewScheduledMessageHandler(ctx context.Context, entities tg.Entities, u *tg.UpdateNewScheduledMessage) error {
 	if u.Message != nil {
 		container := &entryManager.WotoContainer{
+			TelegramClient:            wotoGlobals.Client,
 			OriginMessage:             u.Message,
 			Update:                    u,
 			UpdateNewScheduledMessage: u,
@@ -52,6 +56,7 @@ func NewScheduledMessageHandler(ctx context.Context, entities tg.Entities, u *tg
 func EditMessageHandler(ctx context.Context, entities tg.Entities, u *tg.UpdateEditMessage) error {
 	if u.Message != nil {
 		container := &entryManager.WotoContainer{
+			TelegramClient:    wotoGlobals.Client,
 			OriginMessage:     u.Message,
 			Update:            u,
 			UpdateEditMessage: u,

@@ -3,6 +3,8 @@ package backupPlugin
 import (
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/backupUtils"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
@@ -15,6 +17,16 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	userId := container.GetEffectiveUserID()
 	if !wotoConfig.IsOwner(userId) {
 		return em.ErrContinueGroups
+	}
+
+	userInfo, ok := container.Entities.Users[userId]
+	if !ok {
+		return em.ErrContinueGroups
+	}
+
+	theName := userInfo.FirstName + " " + userInfo.LastName
+	if len(theName) > 32 {
+		theName = theName[:32]
 	}
 
 	args, err := container.GetArgs()
@@ -45,6 +57,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	var sourceFileName string // the uncompressed backup file (output of the backup command)
 	var originFileName string // the origin name that we have to append extensions to it
 	var finalFileName string  // the file to be uploaded to tg
+	var sourceFileSize string // the file size in this format: 10MB or 10.5MB
 
 	if !isPrivate {
 		targetChats = append(targetChats, wotoConfig.GetGlobalLogChannels()...)
@@ -74,6 +87,23 @@ func forceBackupHandler(container *em.WotoContainer) error {
 			return em.ErrEndGroups
 		}
 
+		// fetch file size
+		fileInfo, err := os.Stat(sourceFileName)
+		if err == nil {
+			// format the file size
+			sourceFileSize = backupUtils.FormatFileSize(fileInfo.Size())
+		}
+
+		captionOptions := &backupUtils.GenerateCaptionOptions{
+			ConfigName:     sectionName,
+			BackupInitType: "Manual Backup",
+			InitiatedBy:    theName,
+			UserId:         userId,
+			DateTime:       time.Now(),
+			FileSize:       sourceFileSize,
+			BackupFormat:   strings.ToUpper(bType),
+		}
+
 		err = backupUtils.ZipSource(sourceFileName, finalFileName)
 		if err != nil {
 			_, _ = container.ReplyText("Failed to zip backup file" + err.Error())
@@ -84,7 +114,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
 			ChatIDs:    targetChats,
 			Goroutines: 60,
-			// Caption: "TODO",
+			Caption:    backupUtils.GenerateCaption(captionOptions),
 		})
 		if err != nil {
 			_, _ = container.ReplyText("Failed to upload backup file" + err.Error())
@@ -108,6 +138,16 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		return em.ErrEndGroups
 	}
 
+	captionOptions := &backupUtils.GenerateCaptionOptions{
+		ConfigName:     sectionName,
+		BackupInitType: "Manual Backup",
+		InitiatedBy:    theName,
+		UserId:         userId,
+		DateTime:       time.Now(),
+		FileSize:       sourceFileSize,
+		BackupFormat:   strings.ToUpper(bType),
+	}
+
 	err = backupUtils.ZipSource(sourceFileName, finalFileName)
 	if err != nil {
 		_, _ = container.ReplyError("Failed to zip backup file", err)
@@ -119,7 +159,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		FileName:   filepath.Base(finalFileName),
 		ChatIDs:    targetChats,
 		Goroutines: 60,
-		// Caption: "TODO",
+		Caption:    backupUtils.GenerateCaption(captionOptions),
 	})
 	if err != nil {
 		_, _ = container.ReplyText("Failed to upload backup file" + err.Error())

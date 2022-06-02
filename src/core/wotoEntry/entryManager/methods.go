@@ -435,15 +435,23 @@ func (c *WotoContainer) GetArgs() (*argparser.EventArgs, error) {
 }
 
 func (c *WotoContainer) GetClient() *telegram.Client {
-	return wg.Client
+	return c.TelegramClient
 }
 
 func (c *WotoContainer) ResolveUsername(username string) (*tg.ContactsResolvedPeer, error) {
 	return wg.API.ContactsResolveUsername(gCtx, username)
 }
 
+func (c *WotoContainer) API() *tg.Client {
+	return c.TelegramClient.API()
+}
+
+func (c *WotoContainer) GetFullUserById(userId int64) (*tg.UsersUserFull, error) {
+	return c.API().UsersGetFullUser(c.Ctx(), tgUtils.GetInputUserFromId(userId))
+}
+
 func (c *WotoContainer) ResolveUsernameToUser(username string) *tg.User {
-	contacts, err := wg.API.ContactsResolveUsername(gCtx, username)
+	contacts, err := c.API().ContactsResolveUsername(gCtx, username)
 	if err != nil || contacts == nil {
 		return nil
 	}
