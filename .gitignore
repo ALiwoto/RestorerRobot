@@ -11,6 +11,9 @@ __debug_bin
 # Test binary, built with `go test -c`
 *.test
 
+# swap files
+*.swp
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
