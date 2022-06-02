@@ -97,15 +97,15 @@ func ZipSource(source, target string) error {
 // GenerateCaption generates caption for the backup using the specified options.
 func GenerateCaption(opts *GenerateCaptionOptions) wotoStyle.WStyle {
 	md := wotoStyle.GetBold("Config name: ").Mono(opts.ConfigName)
-	md.Bold("\n Type: ").Mono(opts.BackupInitType)
-	md.Bold("\n Initiated by: ").Mono(opts.InitiatedBy)
+	md.Bold("\nType: ").Mono(opts.BackupInitType)
+	md.Bold("\nInitiated by: ").Mono(opts.InitiatedBy)
 	if opts.UserId != 0 {
-		md.Bold("\n ID: ").Mono(ssg.ToBase10(opts.UserId))
+		md.Bold("\nID: ").Mono(ssg.ToBase10(opts.UserId))
 	}
 
 	if !opts.DateTime.IsZero() {
 		// format should be like: Wed-01-06-2022 11:39 AM
-		md.Bold("\n Date Time: ").Mono(opts.DateTime.Format("Mon-01-02-2006 03:04 PM"))
+		md.Bold("\nDate Time: ").Mono(opts.DateTime.Format("Mon-01-02-2006 03:04 PM"))
 	}
 
 	if opts.FileSize != "" {
@@ -114,7 +114,7 @@ func GenerateCaption(opts *GenerateCaptionOptions) wotoStyle.WStyle {
 			startingTitle = opts.BackupFormat
 		}
 
-		md.Bold("\n " + startingTitle + " size: ").Mono(opts.FileSize)
+		md.Bold("\n" + startingTitle + " size: ").Mono(opts.FileSize)
 	}
 
 	return md
@@ -138,7 +138,7 @@ func FormatFileSize(size int64) string {
 		sizeValue = float64(size)
 	}
 
-	return fmt.Sprintf("%g", sizeValue) + " " + sizeSuffix
+	return fmt.Sprintf("%.4f", sizeValue) + " " + sizeSuffix
 }
 
 // GenerateFileNameFromOrigin creates a filename from the origin,

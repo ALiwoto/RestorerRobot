@@ -222,7 +222,7 @@ func (c *WotoContainer) ReplyText(text string) (tg.UpdatesClass, error) {
 }
 
 func (c *WotoContainer) ReplyError(description string, err error) (tg.UpdatesClass, error) {
-	return c.ReplyStyledText(wotoStyle.GetBold(description).Normal(": " + err.Error()))
+	return c.ReplyStyledText(wotoStyle.GetBold(description + ": ").Mono(err.Error()))
 }
 
 func (c *WotoContainer) ReplyStrikeText(text string) (tg.UpdatesClass, error) {

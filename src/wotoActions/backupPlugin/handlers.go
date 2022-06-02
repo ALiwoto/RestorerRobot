@@ -73,6 +73,10 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		}
 
 		theUrl = section.DbUrl
+		if section.BackupType != "" {
+			bType = section.BackupType
+		}
+
 		sectionName := section.GetSectionName()
 		originFileName = wotoConfig.GetBaseDirForBackup(sectionName) +
 			backupUtils.GenerateFileNameFromValue(sectionName)
@@ -83,7 +87,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 
 		err = backupUtils.BackupDatabase(theUrl, sourceFileName, bType)
 		if err != nil {
-			_, _ = container.ReplyText("Failed to backup database" + err.Error())
+			_, _ = container.ReplyError("Failed to backup database", err)
 			return em.ErrEndGroups
 		}
 
