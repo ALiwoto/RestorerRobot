@@ -11,7 +11,7 @@ import (
 
 var (
 	dbSession *gorm.DB
-	modelUser = &wotoGlobals.PeerInfo{}
+	ModelUser = &wotoGlobals.PeerInfo{}
 	dbMutex   = &sync.Mutex{}
 	peerDbMap = ssg.NewSafeMap[int64, wotoGlobals.PeerInfo]()
 )

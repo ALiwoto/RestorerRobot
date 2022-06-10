@@ -3,16 +3,12 @@ package sessionDatabase
 import (
 	"strings"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
 	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/gotd/td/tg"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func init() {
@@ -21,43 +17,8 @@ func init() {
 	tgUtils.SaveTgUser = SaveTgUser
 }
 
-func StartDatabase() error {
-	// check if `SESSION` variable is already established or not.
-	// if yes, check if we have got any error from it or not.
-	// if there is an error in the session, it mean we have to establish
-	// a new connection again.
-	if dbSession != nil && dbSession.Error == nil {
-		return nil
-	}
-
-	var db *gorm.DB
-	var err error
-	var conf *gorm.Config
-	if wotoConfig.IsDebug() {
-		conf = &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Info),
-		}
-	} else {
-		conf = &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Silent),
-		}
-	}
-
-	db, err = gorm.Open(sqlite.Open(DbPath), conf)
-	if err != nil {
-		return err
-	}
-
+func StartDatabase(db *gorm.DB) error {
 	dbSession = db
-
-	logging.Info("Database connected")
-
-	// Create tables if they don't exist
-	err = dbSession.AutoMigrate(modelUser)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -131,7 +92,7 @@ func GetPeerInfoFromId(id int64) (*wg.PeerInfo, error) {
 
 	u = &wg.PeerInfo{}
 	dbMutex.Lock()
-	dbSession.Model(modelUser).Where("peer_id = ?", id).Take(u)
+	dbSession.Model(ModelUser).Where("peer_id = ?", id).Take(u)
 	dbMutex.Unlock()
 	if u.PeerId != id || u.AccessHash == 0 {
 		if wotoValues.IsRealOwner(id) {

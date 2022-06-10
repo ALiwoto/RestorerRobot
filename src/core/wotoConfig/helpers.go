@@ -124,6 +124,13 @@ func GetAppHash() string {
 	return WotoConf.Main.AppHash
 }
 
+func GetDbPath() string {
+	if WotoConf.Main.DatabasePath == "" {
+		return "session/database.session"
+	}
+	return WotoConf.Main.DatabasePath
+}
+
 func GetDatabasesConfigs() []*ValueSection {
 	return WotoConf.Sections
 }
