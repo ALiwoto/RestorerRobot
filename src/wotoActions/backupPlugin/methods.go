@@ -23,7 +23,7 @@ import (
 // --------------------------------------------------------
 
 func (m *BackupScheduleManager) RunChecking() {
-	time.Sleep(time.Minute)
+	time.Sleep(20 * time.Second)
 	m.checkBackups() // first run is necessary
 
 	for {
@@ -35,7 +35,7 @@ func (m *BackupScheduleManager) RunChecking() {
 func (m *BackupScheduleManager) checkBackups() {
 	var currentContainers []*BackupScheduleContainer
 	for i := 0; i < len(m.containers); i++ {
-		if m.containers[i].IsWithin(managerTimeInterval) && m.containers[i].currentInfo != nil {
+		if m.containers[i].IsWithin(managerTimeInterval) && m.containers[i].currentInfo == nil {
 			currentContainers = append(currentContainers, m.containers[i])
 		}
 	}
@@ -69,7 +69,7 @@ func (m *BackupScheduleManager) PrepareBackupInfo(currentContainers []*BackupSch
 			return
 		}
 
-		target := sender.To(inputTarget)
+		target := sender.To(inputTarget).NoWebpage()
 		if _, err := target.StyledText(context.Background(), md.GetStylingArray()...); err != nil {
 			logging.Error(err)
 		}
@@ -127,6 +127,7 @@ func (c *BackupScheduleContainer) RunBackup() {
 	sourceFileName = originFileName + "." + bType
 	finalFileName = originFileName + wotoConfig.CompressedFileExtension
 	targetChats = append(targetChats, section.LogChannels...)
+	targetChats = append(targetChats, c.ChatIDs...)
 
 	err = backupUtils.BackupDatabase(theUrl, sourceFileName, bType)
 	if err != nil {
