@@ -1,5 +1,12 @@
 package database
 
-import "gorm.io/gorm"
+import (
+	"sync"
 
-var dbSession *gorm.DB
+	"gorm.io/gorm"
+)
+
+var (
+	dbSession *gorm.DB
+	dbMutex   = &sync.Mutex{}
+)

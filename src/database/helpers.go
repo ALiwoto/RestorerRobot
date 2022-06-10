@@ -52,12 +52,12 @@ func StartDatabase() error {
 		return err
 	}
 
-	err = sessionDatabase.StartDatabase(dbSession)
+	err = sessionDatabase.StartDatabase(dbSession, dbMutex)
 	if err != nil {
 		return err
 	}
 
-	err = backupDatabase.StartDatabase(dbSession)
+	err = backupDatabase.StartDatabase(dbSession, dbMutex)
 	if err != nil {
 		return err
 	}

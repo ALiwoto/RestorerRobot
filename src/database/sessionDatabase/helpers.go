@@ -2,6 +2,7 @@ package sessionDatabase
 
 import (
 	"strings"
+	"sync"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
@@ -17,8 +18,9 @@ func init() {
 	tgUtils.SaveTgUser = SaveTgUser
 }
 
-func StartDatabase(db *gorm.DB) error {
+func StartDatabase(db *gorm.DB, mut *sync.Mutex) error {
 	dbSession = db
+	dbMutex = mut
 	return nil
 }
 
