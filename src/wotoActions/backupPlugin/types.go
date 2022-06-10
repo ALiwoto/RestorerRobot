@@ -9,6 +9,7 @@ import (
 type BackupScheduleContainer struct {
 	DatabaseConfig *wotoConfig.ValueSection
 	LastBackupDate time.Time
+	BackupInterval time.Duration
 }
 
 type BackupScheduleManager struct {

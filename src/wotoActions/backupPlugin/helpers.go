@@ -33,6 +33,7 @@ func loadScheduler() {
 		manager.containers[i] = BackupScheduleContainer{
 			DatabaseConfig: configs[i],
 			LastBackupDate: backupDatabase.GetLastBackupDate(configs[i].GetSectionName()),
+			BackupInterval: manager.convertToBackupInterval(configs[i].BackupInterval),
 		}
 	}
 
