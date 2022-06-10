@@ -23,6 +23,7 @@ import (
 // --------------------------------------------------------
 
 func (m *BackupScheduleManager) RunChecking() {
+	time.Sleep(time.Minute)
 	m.checkBackups() // first run is necessary
 
 	for {
