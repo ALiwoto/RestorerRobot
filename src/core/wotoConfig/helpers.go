@@ -124,6 +124,10 @@ func GetAppHash() string {
 	return WotoConf.Main.AppHash
 }
 
+func GetDatabasesConfigs() []*ValueSection {
+	return WotoConf.Sections
+}
+
 func GetGlobalLogChannels() []int64 {
 	return WotoConf.Main.GlobalLogChannels
 }
