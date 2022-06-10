@@ -1,6 +1,7 @@
 package backupPlugin
 
 import (
+	"sync"
 	"time"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
@@ -13,6 +14,7 @@ type BackupScheduleContainer struct {
 	BackupInterval time.Duration
 	currentInfo    *wotoGlobals.BackupInfo
 	ChatIDs        []int64
+	mut            *sync.Mutex
 }
 
 type BackupScheduleManager struct {

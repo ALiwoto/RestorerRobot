@@ -106,6 +106,11 @@ func (c *BackupScheduleContainer) RunBackup() {
 
 	time.Sleep(c.RemainingTime())
 
+	if c.mut != nil {
+		c.mut.Lock()
+		defer c.mut.Unlock()
+	}
+
 	section := c.DatabaseConfig
 	var err error             // failed err reason
 	var theUrl string         // the url of the database we have to pass to backup helper function
@@ -169,6 +174,11 @@ func (c *BackupScheduleContainer) RunBackup() {
 		// _, _ = container.ReplyError("Failed to upload backup file", err)
 		return
 	}
+
+	info := backupDatabase.GetDatabaseInfo(c.DatabaseConfig.GetSectionName())
+	info.LastBackup = time.Now()
+	info.LastBackupUniqueId = c.currentInfo.BackupUniqueId
+	backupDatabase.UpdateDatabaseInfo(info)
 
 	c.currentInfo = nil
 }

@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
 	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"gorm.io/gorm"
 )
@@ -11,6 +12,34 @@ import (
 func StartDatabase(db *gorm.DB, mut *sync.Mutex) error {
 	dbSession = db
 	dbMutex = mut
+
+	err := forceImportSections()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func forceImportSections() error {
+	sections := wotoConfig.WotoConf.Sections
+	if len(sections) == 0 {
+		return nil
+	}
+
+	var err error
+
+	for _, currentSection := range sections {
+		currentInfo := GetDatabaseInfo(currentSection.GetSectionName())
+		if currentInfo == nil {
+			err = NewDatabaseInfo(&wg.DataBaseInfo{
+				DatabaseName: currentSection.GetSectionName(),
+			})
+			if err != nil {
+				return err
+			}
+		}
+	}
 
 	return nil
 }
@@ -52,6 +81,15 @@ func NewDatabaseInfo(info *wg.DataBaseInfo) error {
 	tx.Commit()
 	dbMutex.Unlock()
 	databaseInfoMap.Add(info.DatabaseName, info)
+	return nil
+}
+
+func UpdateDatabaseInfo(info *wg.DataBaseInfo) error {
+	dbMutex.Lock()
+	tx := dbSession.Begin()
+	tx.Save(info)
+	tx.Commit()
+	dbMutex.Unlock()
 	return nil
 }
 

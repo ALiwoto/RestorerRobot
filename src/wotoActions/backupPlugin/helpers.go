@@ -1,6 +1,8 @@
 package backupPlugin
 
 import (
+	"sync"
+
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
 	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
@@ -31,12 +33,15 @@ func loadScheduler() {
 		ChatIDs:       wotoConfig.GetGlobalLogChannels(),
 	}
 
+	containersMutex := &sync.Mutex{}
+
 	for i := 0; i < len(configs); i++ {
 		manager.containers[i] = &BackupScheduleContainer{
 			DatabaseConfig: configs[i],
 			LastBackupDate: backupDatabase.GetLastBackupDate(configs[i].GetSectionName()),
 			BackupInterval: manager.convertToBackupInterval(configs[i].BackupInterval),
 			ChatIDs:        manager.ChatIDs,
+			mut:            containersMutex,
 		}
 	}
 
