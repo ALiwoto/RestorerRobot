@@ -3,6 +3,7 @@ package wotoConfig
 import (
 	"errors"
 	"os"
+	"time"
 
 	"github.com/AnimeKaizoku/ssg/ssg/strongParser"
 )
@@ -129,6 +130,13 @@ func GetDbPath() string {
 		return "session/database.session"
 	}
 	return WotoConf.Main.DatabasePath
+}
+
+func GetScheduleManagerInterval() time.Duration {
+	if WotoConf.Main.ScheduleManagerInterval != 0 {
+		return time.Duration(WotoConf.Main.ScheduleManagerInterval) * time.Hour
+	}
+	return 10 * time.Hour
 }
 
 func GetDatabasesConfigs() []*ValueSection {

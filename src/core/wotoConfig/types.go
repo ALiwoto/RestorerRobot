@@ -1,17 +1,18 @@
 package wotoConfig
 
 type MainConfigSection struct {
-	AppId             string  `key:"app_id"`
-	AppHash           string  `key:"app_hash"`
-	BotToken          string  `key:"bot_token"`
-	DatabasePath      string  `key:"database_path"`
-	BackupsBaseDir    string  `key:"backups_base_directory_path"`
-	PgDumpCommand     string  `key:"pg_dump_command"`
-	GlobalLogChannels []int64 `key:"global_log_channels"`
-	Owners            []int64 `key:"owners"`
-	CmdPrefixes       []rune  `key:"cmd_prefixes" type:"[]rune"`
-	SessionFile       string  `key:"session_file"`
-	Debug             bool    `key:"debug"`
+	AppId                   string  `key:"app_id"`
+	AppHash                 string  `key:"app_hash"`
+	BotToken                string  `key:"bot_token"`
+	DatabasePath            string  `key:"database_path"`
+	BackupsBaseDir          string  `key:"backups_base_directory_path"`
+	PgDumpCommand           string  `key:"pg_dump_command"`
+	GlobalLogChannels       []int64 `key:"global_log_channels"`
+	Owners                  []int64 `key:"owners"`
+	CmdPrefixes             []rune  `key:"cmd_prefixes" type:"[]rune"`
+	SessionFile             string  `key:"session_file"`
+	ScheduleManagerInterval int     `key:"schedule_manager_interval" default:"10"`
+	Debug                   bool    `key:"debug"`
 }
 
 type ValueSection struct {

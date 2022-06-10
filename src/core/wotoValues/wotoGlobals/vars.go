@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/gotd/td/telegram"
 	tgMessage "github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/telegram/updates"
@@ -21,4 +22,8 @@ var (
 
 var (
 	ErrPeerIdInvalid = errors.New("[400 PEER_ID_INVALID] - The peer id being used is invalid or not known yet. Make sure you meet the peer before interacting with it")
+)
+
+var (
+	backupUniqueIdNumGenerator = ssg.NewNumIdGenerator[int64]()
 )

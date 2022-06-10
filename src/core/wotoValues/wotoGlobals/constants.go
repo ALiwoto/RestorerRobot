@@ -14,6 +14,10 @@ const (
 	Owner
 )
 
+const (
+	backupUniqueIdPrefix = "backupZZ"
+)
+
 //  case *tg.InputPeerEmpty: // inputPeerEmpty#7f3b18ea
 //  case *tg.InputPeerSelf: // inputPeerSelf#7da07ec9
 //  case *tg.InputPeerChat: // inputPeerChat#35a95cb9

@@ -26,17 +26,20 @@ func loadScheduler() {
 	}
 
 	manager := &BackupScheduleManager{
-		containers: make([]BackupScheduleContainer, len(configs)),
+		containers:    make([]*BackupScheduleContainer, len(configs)),
+		checkInterval: wotoConfig.GetScheduleManagerInterval(),
+		ChatIDs:       wotoConfig.GetGlobalLogChannels(),
 	}
 
 	for i := 0; i < len(configs); i++ {
-		manager.containers[i] = BackupScheduleContainer{
+		manager.containers[i] = &BackupScheduleContainer{
 			DatabaseConfig: configs[i],
 			LastBackupDate: backupDatabase.GetLastBackupDate(configs[i].GetSectionName()),
 			BackupInterval: manager.convertToBackupInterval(configs[i].BackupInterval),
+			ChatIDs:        manager.ChatIDs,
 		}
 	}
 
 	scheduleManager = manager
-	go manager.Run()
+	go manager.RunChecking()
 }

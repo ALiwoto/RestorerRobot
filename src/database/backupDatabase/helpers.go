@@ -85,3 +85,16 @@ func NewBackupInfo(info *wg.BackupInfo) error {
 	backupInfoMap.Add(info.BackupUniqueId, info)
 	return nil
 }
+
+func GenerateBackupInfo(fromNow time.Duration, by int64) *wg.BackupInfo {
+	info := &wg.BackupInfo{
+		BackupUniqueId: wg.GenerateBackupUniqueId(),
+		BackupDate:     time.Now().Add(fromNow),
+		RequestedBy:    by,
+	}
+
+	NewBackupInfo(info)
+
+	return info
+
+}
