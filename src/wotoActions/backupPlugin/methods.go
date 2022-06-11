@@ -175,10 +175,15 @@ func (c *BackupScheduleContainer) RunBackup() {
 		return
 	}
 
-	info := backupDatabase.GetDatabaseInfo(c.DatabaseConfig.GetSectionName())
-	info.LastBackup = time.Now()
-	info.LastBackupUniqueId = c.currentInfo.BackupUniqueId
-	backupDatabase.UpdateDatabaseInfo(info)
+	dbInfo := backupDatabase.GetDatabaseInfo(c.DatabaseConfig.GetSectionName())
+	dbInfo.LastBackup = time.Now()
+	dbInfo.LastBackupUniqueId = c.currentInfo.BackupUniqueId
+	backupDatabase.UpdateDatabaseInfo(dbInfo)
+
+	c.currentInfo.SetAsFinished()
+	backupDatabase.UpdateBackupInfo(c.currentInfo)
+
+	c.LastBackupDate = dbInfo.LastBackup
 
 	c.currentInfo = nil
 }

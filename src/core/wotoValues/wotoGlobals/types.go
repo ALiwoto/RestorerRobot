@@ -4,6 +4,7 @@ import "time"
 
 type UserPermission int
 type PeerType int
+type BackupStatus int
 type BackupUniqueIdValue string
 
 type PeerInfo struct {
@@ -25,4 +26,5 @@ type BackupInfo struct {
 	BackupUniqueId BackupUniqueIdValue `gorm:"primaryKey"`
 	BackupDate     time.Time
 	RequestedBy    int64
+	Status         BackupStatus
 }

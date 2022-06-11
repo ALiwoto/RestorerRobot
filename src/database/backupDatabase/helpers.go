@@ -93,6 +93,15 @@ func UpdateDatabaseInfo(info *wg.DataBaseInfo) error {
 	return nil
 }
 
+func UpdateBackupInfo(info *wg.BackupInfo) error {
+	dbMutex.Lock()
+	tx := dbSession.Begin()
+	tx.Save(info)
+	tx.Commit()
+	dbMutex.Unlock()
+	return nil
+}
+
 func GetBackupInfo(uniqueId wg.BackupUniqueIdValue) *wg.BackupInfo {
 	info := backupInfoMap.Get(uniqueId)
 	if info != nil {
@@ -129,6 +138,7 @@ func GenerateBackupInfo(fromNow time.Duration, by int64) *wg.BackupInfo {
 		BackupUniqueId: wg.GenerateBackupUniqueId(),
 		BackupDate:     time.Now().Add(fromNow),
 		RequestedBy:    by,
+		Status:         wg.BackupStatusPending,
 	}
 
 	NewBackupInfo(info)
