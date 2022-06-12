@@ -51,8 +51,23 @@ func (m *BackupScheduleManager) checkBackups() {
 	}
 }
 
+// FormatInterval method will convert the time interval with this format:
+// "1 day, 2 hours, 3 minutes, 4 seconds" (it will omit the smaller units if they are 0)
+func (m *BackupScheduleManager) FormatInterval() string {
+	myStr := managerTimeInterval.String()
+	if strings.HasSuffix(myStr, "0s") {
+		myStr = strings.TrimSuffix(myStr, "0s")
+	}
+
+	if strings.HasSuffix(myStr, "0m") {
+		myStr = strings.TrimSuffix(myStr, "0m")
+	}
+
+	return strings.ReplaceAll(myStr, "h", "hours")
+}
+
 func (m *BackupScheduleManager) PrepareBackupInfo(currentContainers []*BackupScheduleContainer) {
-	md := wotoStyle.GetBold("🔹 Following databases will be backed up within the next " + managerTimeInterval.String() + ":")
+	md := wotoStyle.GetBold("🔹 Following databases will be backed up in " + m.FormatInterval() + ":")
 
 	var current *BackupScheduleContainer
 	for i := 0; i < len(currentContainers); i++ {
