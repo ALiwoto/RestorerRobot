@@ -150,6 +150,12 @@ func (c *BackupScheduleContainer) RunBackup() {
 	c.isSleeping = true
 	time.Sleep(c.RemainingTime())
 
+	setError := func(theErr error) {
+		c.currentInfo.SetAsFailed(theErr)
+		backupDatabase.UpdateBackupInfo(c.currentInfo)
+		c.currentInfo = nil
+	}
+
 	section := c.DatabaseConfig
 	var err error             // failed err reason
 	var theUrl string         // the url of the database we have to pass to backup helper function
@@ -175,7 +181,7 @@ func (c *BackupScheduleContainer) RunBackup() {
 
 	err = backupUtils.BackupDatabase(theUrl, sourceFileName, bType)
 	if err != nil {
-		//_, _ = container.ReplyError("Failed to backup database", err)
+		setError(err)
 		return
 	}
 
@@ -198,7 +204,7 @@ func (c *BackupScheduleContainer) RunBackup() {
 
 	err = backupUtils.ZipSource(sourceFileName, finalFileName)
 	if err != nil {
-		// _, _ = container.ReplyError("Failed to zip backup file", err)
+		setError(err)
 		return
 	}
 	_ = os.Remove(sourceFileName)
@@ -210,7 +216,7 @@ func (c *BackupScheduleContainer) RunBackup() {
 		Caption:    backupUtils.GenerateCaption(captionOptions),
 	})
 	if err != nil {
-		// _, _ = container.ReplyError("Failed to upload backup file", err)
+		setError(err)
 		return
 	}
 

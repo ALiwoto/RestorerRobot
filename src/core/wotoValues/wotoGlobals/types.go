@@ -28,4 +28,5 @@ type BackupInfo struct {
 	BackupDate     time.Time
 	RequestedBy    int64
 	Status         BackupStatus
+	Message        string
 }

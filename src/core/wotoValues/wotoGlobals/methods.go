@@ -79,6 +79,9 @@ func (i *BackupInfo) SetAsFinished() {
 	i.Status = BackupStatusFinished
 }
 
-func (i *BackupInfo) SetAsFailed() {
+func (i *BackupInfo) SetAsFailed(err error) {
 	i.Status = BackupStatusFailed
+	if err != nil {
+		i.Message = err.Error()
+	}
 }
