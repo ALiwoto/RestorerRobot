@@ -110,7 +110,7 @@ func GetBackupInfo(uniqueId wg.BackupUniqueIdValue) *wg.BackupInfo {
 
 	info = &wg.BackupInfo{}
 	dbMutex.Lock()
-	dbSession.Model(ModelDatabaseInfo).Where("backup_uniqueId = ?", uniqueId).Take(info)
+	dbSession.Model(ModelBackupInfo).Where("backup_unique_id = ?", uniqueId).Take(info)
 	dbMutex.Unlock()
 
 	if info.BackupUniqueId != uniqueId {

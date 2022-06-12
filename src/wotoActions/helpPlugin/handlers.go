@@ -45,14 +45,16 @@ func startHandler(container *em.WotoContainer) error {
 			}
 
 			md := wotoStyle.GetBold("🔹 Backup info:")
-			md.Bold("\n・Name: ").Normal(bInfo.DatabaseName)
-			md.Bold("\n・Unique ID: ").Normal(string(bInfo.BackupUniqueId))
-			md.Bold("\n・Last backup: ").Normal(bInfo.BackupDate.Format("2006-01-02 15:04:05"))
-			md.Bold("\n・Backup status: ").Normal(bInfo.GetStrStatus())
+			md.Bold("\n・Name: ").Mono(bInfo.DatabaseName)
+			md.Bold("\n・Unique ID: ").Mono(string(bInfo.BackupUniqueId))
+			md.Bold("\n・Last backup: ").Mono(bInfo.BackupDate.Format("2006-01-02 15:04:05"))
+			md.Bold("\n・Backup status: ").Mono(bInfo.GetStrStatus())
+			_, _ = container.ReplyStyledText(md)
+			return em.ErrEndGroups
 		}
 	}
 
-	md := wotoStyle.GetBold("Welcome to " + wotoGlobals.Self.Username)
+	md := wotoStyle.GetNormal("Welcome to " + wotoGlobals.Self.Username)
 	md.Normal(" master!")
 	md.Normal("\n This bot lets you take backup from unlimited amount of databases ")
 	md.Normal("with the specified time intervals.")
