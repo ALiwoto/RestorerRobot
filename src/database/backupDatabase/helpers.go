@@ -133,9 +133,10 @@ func NewBackupInfo(info *wg.BackupInfo) error {
 	return nil
 }
 
-func GenerateBackupInfo(fromNow time.Duration, by int64) *wg.BackupInfo {
+func GenerateBackupInfo(name string, fromNow time.Duration, by int64) *wg.BackupInfo {
 	info := &wg.BackupInfo{
 		BackupUniqueId: wg.GenerateBackupUniqueId(),
+		DatabaseName:   name,
 		BackupDate:     time.Now().Add(fromNow),
 		RequestedBy:    by,
 		Status:         wg.BackupStatusPending,

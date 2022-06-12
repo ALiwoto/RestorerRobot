@@ -24,6 +24,7 @@ type DataBaseInfo struct {
 // BackupInfo contains the information about each backup the bot gets.
 type BackupInfo struct {
 	BackupUniqueId BackupUniqueIdValue `gorm:"primaryKey"`
+	DatabaseName   string
 	BackupDate     time.Time
 	RequestedBy    int64
 	Status         BackupStatus

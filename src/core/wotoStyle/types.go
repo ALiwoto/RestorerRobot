@@ -42,6 +42,7 @@ type WStyle interface {
 	Spoiler(v string) WStyle
 	Link(text, url string) WStyle
 	Mention(text string, id int64) WStyle
+	MentionHash(text string, u, hash int64) WStyle
 	UserMention(text string, u *tg.User) WStyle
 	MentionUsername(text string, username string) WStyle
 

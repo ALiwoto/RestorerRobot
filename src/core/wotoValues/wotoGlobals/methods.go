@@ -44,6 +44,23 @@ func (s BackupStatus) IsUnknown() bool {
 
 //---------------------------------------------------------
 
+func (i *BackupInfo) GetStrStatus() string {
+	switch i.Status {
+	case BackupStatusPending:
+		return "Pending"
+	case BackupStatusCanceled:
+		return "Canceled"
+	case BackupStatusFinished:
+		return "Finished"
+	case BackupStatusFailed:
+		return "Failed"
+	case BackupStatusUnknown:
+		fallthrough
+	default:
+		return "Unknown"
+	}
+}
+
 func (i *BackupInfo) SetAsPending() {
 	i.Status = BackupStatusPending
 }

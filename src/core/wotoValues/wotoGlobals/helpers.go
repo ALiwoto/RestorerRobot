@@ -17,3 +17,7 @@ func GenerateBackupUniqueId() BackupUniqueIdValue {
 
 	return BackupUniqueIdValue(strValue)
 }
+
+func IsBackupUniqueId(value string) bool {
+	return strings.HasPrefix(value, backupUniqueIdPrefix)
+}

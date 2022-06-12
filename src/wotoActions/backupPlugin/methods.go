@@ -57,7 +57,11 @@ func (m *BackupScheduleManager) PrepareBackupInfo(currentContainers []*BackupSch
 	var current *BackupScheduleContainer
 	for i := 0; i < len(currentContainers); i++ {
 		current = currentContainers[i]
-		current.currentInfo = backupDatabase.GenerateBackupInfo(current.RemainingTime(), 0)
+		current.currentInfo = backupDatabase.GenerateBackupInfo(
+			current.GetName(),
+			current.RemainingTime(),
+			0,
+		)
 		md.ElThis().AppendThis(current.ParseAsMd())
 	}
 

@@ -166,6 +166,12 @@ func (s *wotoStyling) Mention(text string, id int64) WStyle {
 	})
 }
 
+func (s *wotoStyling) MentionHash(text string, u, hash int64) WStyle {
+	return s.AppendByFuncThis(text, func(s string) styling.StyledTextOption {
+		return styling.MentionName(s, tgUtils.GetInputUser(u, hash))
+	})
+}
+
 func (s *wotoStyling) AppendUserMention(text string, u *tg.User) WStyle {
 	if u == nil {
 		return s.AppendMono(text)
