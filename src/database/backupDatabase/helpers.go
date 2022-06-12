@@ -5,10 +5,12 @@ import (
 	"time"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
+	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"gorm.io/gorm"
 )
 
+// StartDatabase will initialize the variables for backupDatabase package.
 func StartDatabase(db *gorm.DB, mut *sync.Mutex) error {
 	dbSession = db
 	dbMutex = mut
@@ -21,6 +23,7 @@ func StartDatabase(db *gorm.DB, mut *sync.Mutex) error {
 	return nil
 }
 
+// forceImportSections will forcefully import all sections into the database.
 func forceImportSections() error {
 	sections := wotoConfig.WotoConf.Sections
 	if len(sections) == 0 {
@@ -44,6 +47,7 @@ func forceImportSections() error {
 	return nil
 }
 
+// GetLastBackupDate will return the last time the specified database was backed up.
 func GetLastBackupDate(configName string) time.Time {
 	info := GetDatabaseInfo(configName)
 	if info == nil {
@@ -53,6 +57,7 @@ func GetLastBackupDate(configName string) time.Time {
 	return info.LastBackup
 }
 
+// GetDatabaseInfo returns the database info using its specified name.
 func GetDatabaseInfo(name string) *wg.DataBaseInfo {
 	info := databaseInfoMap.Get(name)
 	if info != nil {
@@ -72,6 +77,31 @@ func GetDatabaseInfo(name string) *wg.DataBaseInfo {
 	databaseInfoMap.Add(name, info)
 
 	return info
+}
+
+func GetLastBackupStatus(name string) wg.BackupStatus {
+	dbInfo := GetDatabaseInfo(name)
+	if dbInfo == nil || dbInfo.LastBackupUniqueId.IsInvalid() {
+		return wg.BackupStatusUnknown
+	}
+
+	backupInfo := GetBackupInfo(dbInfo.LastBackupUniqueId)
+	if backupInfo == nil {
+		return wg.BackupStatusUnknown
+	}
+
+	return backupInfo.Status
+}
+
+// GetBackupFinishedCount returns the count of the finished backups for the
+// specified database name.
+func GetBackupFinishedCount(name string) int64 {
+	var count int64
+	dbMutex.Lock()
+	m := dbSession.Model(ModelBackupInfo)
+	m.Where("database_name = ? AND status = ?", name, wotoGlobals.BackupStatusFinished).Count(&count)
+	dbMutex.Unlock()
+	return count
 }
 
 func NewDatabaseInfo(info *wg.DataBaseInfo) error {

@@ -22,6 +22,12 @@ func (i *PeerInfo) GetRealID() int64 {
 
 // --------------------------------------------------------
 
+func (i BackupUniqueIdValue) IsInvalid() bool {
+	return i == "" || !strings.HasPrefix(string(i), backupUniqueIdPrefix)
+}
+
+// --------------------------------------------------------
+
 func (s BackupStatus) IsPending() bool {
 	return s == BackupStatusPending
 }

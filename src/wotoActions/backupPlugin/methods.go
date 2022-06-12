@@ -33,9 +33,12 @@ func (m *BackupScheduleManager) RunChecking() {
 }
 
 func (m *BackupScheduleManager) checkBackups() {
+	var current *BackupScheduleContainer
 	var currentContainers []*BackupScheduleContainer
 	for i := 0; i < len(m.containers); i++ {
-		if m.containers[i].IsWithin(managerTimeInterval) && m.containers[i].currentInfo == nil {
+		current = m.containers[i]
+		if current.NeedsImmediateBackup() ||
+			(current.IsWithin(managerTimeInterval) && current.currentInfo == nil) {
 			currentContainers = append(currentContainers, m.containers[i])
 		}
 	}
@@ -67,7 +70,7 @@ func (m *BackupScheduleManager) FormatInterval() string {
 }
 
 func (m *BackupScheduleManager) PrepareBackupInfo(currentContainers []*BackupScheduleContainer) {
-	md := wotoStyle.GetBold("🔹 Following databases will be backed up in " + m.FormatInterval() + ":")
+	md := wotoStyle.GetBold("🔹 Following databases will be backed up in less than " + m.FormatInterval() + ":")
 
 	var current *BackupScheduleContainer
 	for i := 0; i < len(currentContainers); i++ {
@@ -222,6 +225,24 @@ func (c *BackupScheduleContainer) RunBackup() {
 	c.LastBackupDate = dbInfo.LastBackup
 
 	c.currentInfo = nil
+}
+
+func (c *BackupScheduleContainer) NeedsImmediateBackup() bool {
+	// There are two conditions to trigger an immediate backup:
+	// 1- the database has 0 finished backup.
+	// 2- the database's last backup info is in pending status,
+	//  which means the last time we have tried to backup the database,
+	//  the program either got interrupted (such as being killed by user), or
+	//  got stuck in a loop (such as the database is not responding).
+
+	// case 1
+	if backupDatabase.GetBackupFinishedCount(c.GetName()) == 0 {
+		return true
+	}
+
+	// case 2
+	lastStatus := backupDatabase.GetLastBackupStatus(c.GetName())
+	return lastStatus.IsPending() || lastStatus.IsCanceled()
 }
 
 func (m *BackupScheduleContainer) UploadFileToChats(filename string, opts *em.UploadDocumentToChatsOptions) error {
