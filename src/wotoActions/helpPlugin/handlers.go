@@ -49,6 +49,14 @@ func startHandler(container *em.WotoContainer) error {
 			md.Bold("\n・Unique ID: ").Mono(string(bInfo.BackupUniqueId))
 			md.Bold("\n・Last backup: ").Mono(bInfo.BackupDate.Format("2006-01-02 15:04:05"))
 			md.Bold("\n・Backup status: ").Mono(bInfo.GetStrStatus())
+			if bInfo.Message != "" {
+				switch bInfo.Status {
+				case wotoGlobals.BackupStatusFailed:
+					md.Bold("\n・Error message: ").Mono(bInfo.Message)
+				default:
+					md.Bold("\n・Notice: ").Mono(bInfo.Message)
+				}
+			}
 			_, _ = container.ReplyStyledText(md)
 			return em.ErrEndGroups
 		}
