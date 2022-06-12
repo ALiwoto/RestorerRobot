@@ -188,7 +188,7 @@ func (c *BackupScheduleContainer) RunBackup() {
 
 	captionOptions := &backupUtils.GenerateCaptionOptions{
 		ConfigName:     sectionName,
-		BackupInitType: "Automatic Backup System",
+		BackupInitType: "Automatic Backup",
 		InitiatedBy:    "Backup Schedule Container",
 		UserId:         0,
 		DateTime:       time.Now(),
