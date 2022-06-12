@@ -96,7 +96,22 @@ func (m *BackupScheduleContainer) RemainingTime() time.Duration {
 }
 
 func (c *BackupScheduleContainer) ParseAsMd() wotoStyle.WStyle {
-	return wotoStyle.GetHyperLink(c.DatabaseConfig.GetSectionName(), "http://t.me/ShigeoRobot?start=ghelp_sibylsystem")
+	name := c.DatabaseConfig.GetSectionName()
+	username := wotoGlobals.Self.Username
+	link := "https://t.me/" + username + "?start=" + string(c.currentInfo.BackupUniqueId)
+	return wotoStyle.GetHyperLink("・"+name, link)
+}
+
+func (c *BackupScheduleContainer) GetStrUniqueId() string {
+	return string(c.currentInfo.BackupUniqueId)
+}
+
+func (c *BackupScheduleContainer) GetName() string {
+	return c.DatabaseConfig.GetSectionName()
+}
+
+func (c *BackupScheduleContainer) GetBackupType() string {
+	return c.DatabaseConfig.BackupType
 }
 
 func (c *BackupScheduleContainer) RunBackup() {
