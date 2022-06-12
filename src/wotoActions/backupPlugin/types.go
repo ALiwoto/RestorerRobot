@@ -15,6 +15,7 @@ type BackupScheduleContainer struct {
 	currentInfo    *wotoGlobals.BackupInfo
 	ChatIDs        []int64
 	mut            *sync.Mutex
+	isSleeping     bool
 }
 
 type BackupScheduleManager struct {

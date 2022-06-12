@@ -102,7 +102,10 @@ func (m *BackupScheduleManager) convertToBackupInterval(days int) time.Duration 
 // --------------------------------------------------------
 
 func (m *BackupScheduleContainer) IsWithin(d time.Duration) bool {
-	return time.Since(m.LastBackupDate)-m.BackupInterval >= d
+	m.mut.Lock()
+	defer m.mut.Unlock()
+
+	return !m.isSleeping && time.Since(m.LastBackupDate)-m.BackupInterval >= d
 }
 
 func (m *BackupScheduleContainer) RemainingTime() time.Duration {
@@ -134,16 +137,15 @@ func (c *BackupScheduleContainer) GetBackupType() string {
 }
 
 func (c *BackupScheduleContainer) RunBackup() {
-	if c.currentInfo == nil {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
+	if c.currentInfo == nil || c.isSleeping {
 		return
 	}
 
+	c.isSleeping = true
 	time.Sleep(c.RemainingTime())
-
-	if c.mut != nil {
-		c.mut.Lock()
-		defer c.mut.Unlock()
-	}
 
 	section := c.DatabaseConfig
 	var err error             // failed err reason
