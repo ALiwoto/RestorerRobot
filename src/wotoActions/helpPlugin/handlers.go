@@ -69,3 +69,13 @@ func startHandler(container *em.WotoContainer) error {
 	_, _ = container.ReplyStyledText(md)
 	return em.ErrEndGroups
 }
+
+func dbInfoHandler(container *em.WotoContainer) error {
+	userId := container.GetEffectiveUserID()
+	user := container.Entities.Users[userId]
+	if user == nil || !wotoConfig.IsOwner(userId) {
+		return em.ErrEndGroups
+	}
+
+	return em.ErrEndGroups
+}
