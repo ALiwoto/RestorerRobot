@@ -8,6 +8,14 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
 )
 
+func GetContainerByName(name string) *BackupScheduleContainer {
+	if scheduleManager == nil {
+		return nil
+	}
+
+	return scheduleManager.GetContainerByName(name)
+}
+
 func LoadAllHandlers(manager *entryManager.EntryManager) {
 	manager.AddHandlers(forceBackupCmd, forceBackupHandler)
 

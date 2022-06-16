@@ -69,6 +69,16 @@ func (m *BackupScheduleManager) FormatInterval() string {
 	return strings.ReplaceAll(myStr, "h", "hours")
 }
 
+func (m *BackupScheduleManager) GetContainerByName(name string) *BackupScheduleContainer {
+	for _, current := range m.containers {
+		if current.GetName() == name {
+			return current
+		}
+	}
+
+	return nil
+}
+
 func (m *BackupScheduleManager) PrepareBackupInfo(currentContainers []*BackupScheduleContainer) {
 	md := wotoStyle.GetBold("🔹 Following databases will be backed up in less than " + m.FormatInterval() + ":")
 

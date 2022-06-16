@@ -8,6 +8,8 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
+	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions/backupPlugin"
+	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
 func configsHandler(container *em.WotoContainer) error {
@@ -75,6 +77,29 @@ func dbInfoHandler(container *em.WotoContainer) error {
 	user := container.Entities.Users[userId]
 	if user == nil || !wotoConfig.IsOwner(userId) {
 		return em.ErrEndGroups
+	}
+
+	myStrs := ssg.SplitN(container.GetMessageText(), 2, " ", "\n")
+	if len(myStrs) < 2 {
+		_, _ = container.ReplyText("Please provide me a database name to get info of it.")
+		return em.ErrEndGroups
+	}
+
+	dbName := myStrs[1]
+
+	section := wotoConfig.GetSectionValueByName(dbName)
+	if section == nil {
+		_, _ = container.ReplyText("No such config section: " + dbName)
+		return em.ErrEndGroups
+	}
+
+	md := wotoStyle.GetBold("🔸Database Info")
+	md.Bold("\n・Name: ").Mono(dbName)
+	md.Bold("\n・Type: ").Mono(section.BackupType)
+
+	backupContainer := backupPlugin.GetContainerByName(dbName)
+	if backupContainer != nil {
+		md.Bold("\n・Time to next backup: ").Mono(backupContainer.RemainingTime().String())
 	}
 
 	return em.ErrEndGroups
