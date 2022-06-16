@@ -34,7 +34,7 @@ func configsHandler(container *em.WotoContainer) error {
 		md.Bold("\n" + ssg.ToBase10(int64(i)) + "- ").Mono(currentName)
 		currentLastBackupDate = backupDatabase.GetLastBackupDate(currentName)
 		if !currentLastBackupDate.IsZero() {
-			md.Bold("[").Mono(currentLastBackupDate.Format("Mon-01-02-2006 03:04 PM")).Bold("]")
+			md.Normal(" [" + currentLastBackupDate.Format("Mon-01-02-2006 03:04 PM") + "]")
 		}
 	}
 
