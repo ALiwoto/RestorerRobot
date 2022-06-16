@@ -2,6 +2,7 @@ package helpPlugin
 
 import (
 	"strings"
+	"time"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
 	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
@@ -13,6 +14,32 @@ import (
 )
 
 func configsHandler(container *em.WotoContainer) error {
+	userId := container.GetEffectiveUserID()
+	user := container.Entities.Users[userId]
+	if user == nil || !wotoConfig.IsOwner(userId) {
+		return em.ErrEndGroups
+	}
+
+	var currentName string
+	var currentLastBackupDate time.Time
+
+	if len(wotoConfig.WotoConf.Sections) == 0 {
+		_, _ = container.ReplyText("No databases configured yet.")
+		return em.ErrEndGroups
+	}
+
+	md := wotoStyle.GetBold("📄 List of configured databases:")
+	for i, current := range wotoConfig.WotoConf.Sections {
+		currentName = current.GetSectionName()
+		md.Bold("\n" + ssg.ToBase10(int64(i)) + "- ").Mono(currentName)
+		currentLastBackupDate = backupDatabase.GetLastBackupDate(currentName)
+		if !currentLastBackupDate.IsZero() {
+			md.Bold("[").Mono(currentLastBackupDate.Format("Mon-01-02-2006 03:04 PM")).Bold("]")
+		}
+	}
+
+	_, _ = container.ReplyStyledText(md)
+
 	return em.ErrEndGroups
 }
 

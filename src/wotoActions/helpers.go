@@ -9,6 +9,12 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions/statsPlugin"
 )
 
+// LoadAllHandlers will load all handlers from all plugins.
+// WARNING: helpPlugin imports backupPlugin, do NOT import any other
+// plugin inside of backupPlugin to prevent cycle import error.
+// (importing plugins inside of plugins is a big mistake by itself,
+// but this time I was just too lazy to move types and methods to
+// wotoValues).
 func LoadAllHandlers() {
 	loadManagers()
 
