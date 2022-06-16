@@ -159,6 +159,7 @@ func (c *BackupScheduleContainer) RunBackup() {
 
 	c.isSleeping = true
 	time.Sleep(c.RemainingTime())
+	c.isSleeping = false
 
 	setError := func(theErr error) {
 		c.currentInfo.SetAsFailed(theErr)
