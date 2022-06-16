@@ -16,6 +16,7 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
+	"github.com/AnimeKaizoku/ssg/ssg"
 	"github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/telegram/uploader"
 )
@@ -128,6 +129,10 @@ func (m *BackupScheduleContainer) RemainingTime() time.Duration {
 	}
 
 	return tmp
+}
+
+func (m *BackupScheduleContainer) RemainingTimeStr() string {
+	return ssg.GetPrettyTimeDuration(m.RemainingTime(), true)
 }
 
 func (c *BackupScheduleContainer) ParseAsMd() wotoStyle.WStyle {

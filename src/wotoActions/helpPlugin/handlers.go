@@ -99,7 +99,7 @@ func dbInfoHandler(container *em.WotoContainer) error {
 
 	backupContainer := backupPlugin.GetContainerByName(dbName)
 	if backupContainer != nil {
-		md.Bold("\n・Time to next backup: ").Mono(backupContainer.RemainingTime().String())
+		md.Bold("\n・Time to next backup: ").Mono(backupContainer.RemainingTimeStr())
 	}
 
 	_, _ = container.ReplyStyledText(md)
