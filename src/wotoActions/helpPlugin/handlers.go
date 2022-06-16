@@ -102,5 +102,7 @@ func dbInfoHandler(container *em.WotoContainer) error {
 		md.Bold("\n・Time to next backup: ").Mono(backupContainer.RemainingTime().String())
 	}
 
+	_, _ = container.ReplyStyledText(md)
+
 	return em.ErrEndGroups
 }
