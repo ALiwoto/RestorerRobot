@@ -31,7 +31,7 @@ func configsHandler(container *em.WotoContainer) error {
 	md := wotoStyle.GetBold("📄 List of configured databases:")
 	for i, current := range wotoConfig.WotoConf.Sections {
 		currentName = current.GetSectionName()
-		md.Bold("\n" + ssg.ToBase10(int64(i)) + "- ").Mono(currentName)
+		md.Bold("\n" + ssg.ToBase10(int64(i+1)) + "- ").Mono(currentName)
 		currentLastBackupDate = backupDatabase.GetLastBackupDate(currentName)
 		if !currentLastBackupDate.IsZero() {
 			md.Normal(" [" + currentLastBackupDate.Format("Mon-01-02-2006 03:04 PM") + "]")
