@@ -1,5 +1,7 @@
 package wotoConfig
 
+type DatabaseBackupType string
+
 type MainConfigSection struct {
 	AppId                   string  `key:"app_id"`
 	AppHash                 string  `key:"app_hash"`

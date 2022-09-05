@@ -17,16 +17,19 @@ import (
 
 // BackupDatabase backups a database using its url to the specified filename
 // and the type.
-// currently only "sql" and "dump" types are supported for the third
-// argument.
-func BackupDatabase(url, filename, bType string) error {
+// for seeing which types are currently supported, refer to DatabaseBackupType.IsInvalidType
+// method.
+func BackupDatabase(url, filename string, bType wotoConfig.DatabaseBackupType) error {
+	if bType.IsInvalidType() {
+		return errors.New("unsupported backup type")
+	}
+
 	backupCommand := wotoConfig.GetPgDumpCommand() + " -d " + url + " "
+	// #TODO: convert this ughly if-else statement to a cute switch in future
 	if bType == wotoConfig.BackupTypeSQL {
 		backupCommand += ">> " + filename
 	} else if bType == wotoConfig.BackupTypeDump {
 		backupCommand += "> " + filename
-	} else {
-		return errors.New("unsupported backup type")
 	}
 
 	result := ssg.RunCommand(backupCommand)
