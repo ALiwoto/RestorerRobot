@@ -56,3 +56,7 @@ func loadScheduler() {
 	scheduleManager = manager
 	go manager.RunChecking()
 }
+
+func toBackupType(value string) wotoConfig.DatabaseBackupType {
+	return wotoConfig.DatabaseBackupType(value)
+}

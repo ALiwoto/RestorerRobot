@@ -51,7 +51,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		bType = wotoConfig.BackupTypeDump // default is .dump
 	}
 
-	isUrl := wotoGlobals.IsDatabaseUrl(name)
+	isUrl := wotoGlobals.IsPostgresDatabaseUrl(name)
 	var theUrl string         // the url of the database we have to pass to backup helper function
 	var targetChats []int64   // the chats we want to send our files to
 	var sourceFileName string // the uncompressed backup file (output of the backup command)
@@ -67,7 +67,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		if section == nil {
 			_, _ = container.ReplyText("No such config section: " + name)
 			return em.ErrEndGroups
-		} else if !wotoGlobals.IsDatabaseUrl(section.DbUrl) {
+		} else if !wotoGlobals.IsPostgresDatabaseUrl(section.DbUrl) {
 			_, _ = container.ReplyText("You have provided wrong url format for the section " + name)
 			return em.ErrEndGroups
 		}
@@ -85,7 +85,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		targetChats = append(targetChats, section.LogChannels...)
 		targetChats = append(targetChats, userId)
 
-		err = backupUtils.BackupDatabase(theUrl, sourceFileName, bType)
+		err = backupUtils.BackupDatabase(theUrl, sourceFileName, toBackupType(bType))
 		if err != nil {
 			_, _ = container.ReplyError("Failed to backup database", err)
 			return em.ErrEndGroups
@@ -137,7 +137,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	sourceFileName = originFileName + "." + bType
 	finalFileName = originFileName + wotoConfig.CompressedFileExtension
 	targetChats = append(targetChats, userId)
-	err = backupUtils.BackupDatabase(theUrl, sourceFileName, bType)
+	err = backupUtils.BackupDatabase(theUrl, sourceFileName, toBackupType(bType))
 	if err != nil {
 		_, _ = container.ReplyError("Failed to backup database", err)
 		return em.ErrEndGroups

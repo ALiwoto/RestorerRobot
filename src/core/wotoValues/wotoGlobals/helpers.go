@@ -7,8 +7,8 @@ import (
 	"github.com/AnimeKaizoku/ssg/ssg"
 )
 
-func IsDatabaseUrl(value string) bool {
-	return strings.HasPrefix(value, "postgresql://")
+func IsPostgresDatabaseUrl(value string) bool {
+	return strings.HasPrefix(value, "postgresql://") || strings.HasPrefix(value, "postgres")
 }
 
 func GenerateBackupUniqueId() BackupUniqueIdValue {
