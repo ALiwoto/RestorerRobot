@@ -48,10 +48,11 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	}
 
 	if bType == "" {
-		bType = wotoConfig.BackupTypeDump // default is .dump
+		bType = string(wotoConfig.BackupTypeDump) // default is .dump
 	}
 
 	isUrl := wotoGlobals.IsPostgresDatabaseUrl(name)
+	isLocalFileDir := wotoGlobals.IsValidLocalFileOrDir(name)
 	var theUrl string         // the url of the database we have to pass to backup helper function
 	var targetChats []int64   // the chats we want to send our files to
 	var sourceFileName string // the uncompressed backup file (output of the backup command)
@@ -62,6 +63,44 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	if !isPrivate {
 		targetChats = append(targetChats, wotoConfig.GetGlobalLogChannels()...)
 	}
+
+	if isLocalFileDir {
+		sectionName := filepath.Base(name) // dummy sectionName
+		originFileName = wotoConfig.GetBaseDirForBackup(sectionName) +
+			backupUtils.GenerateFileNameFromValue(sectionName)
+		finalFileName = originFileName + wotoConfig.CompressedFileExtension
+		targetChats = append(targetChats, userId)
+
+		captionOptions := &backupUtils.GenerateCaptionOptions{
+			ConfigName:     sectionName,
+			BackupInitType: "Manual Backup",
+			InitiatedBy:    theName,
+			UserId:         userId,
+			DateTime:       time.Now(),
+			FileSize:       sourceFileSize,
+			BackupFormat:   strings.ToUpper(bType),
+		}
+
+		err = backupUtils.ZipSource(name, finalFileName)
+		if err != nil {
+			_, _ = container.ReplyError("Failed to zip backup file", err)
+			return em.ErrEndGroups
+		}
+
+		err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
+			FileName:   filepath.Base(finalFileName),
+			ChatIDs:    targetChats,
+			Goroutines: 60,
+			Caption:    backupUtils.GenerateCaption(captionOptions),
+		})
+		if err != nil {
+			_, _ = container.ReplyText("Failed to upload backup file: " + err.Error())
+			return em.ErrEndGroups
+		}
+
+		return em.ErrEndGroups
+	}
+
 	if !isUrl {
 		section := wotoConfig.GetSectionValueByName(name)
 		if section == nil {
@@ -167,7 +206,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		Caption:    backupUtils.GenerateCaption(captionOptions),
 	})
 	if err != nil {
-		_, _ = container.ReplyText("Failed to upload backup file" + err.Error())
+		_, _ = container.ReplyText("Failed to upload backup file: " + err.Error())
 		return em.ErrEndGroups
 	}
 

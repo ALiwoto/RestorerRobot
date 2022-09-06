@@ -10,6 +10,6 @@ func (v *ValueSection) SetSectionName(name string) {
 
 //---------------------------------------------------------
 
-func (d *DatabaseBackupType) IsInvalidType() bool {
-	return false
+func (d DatabaseBackupType) IsInvalidType() bool {
+	return !_backupTypesMap[d]
 }
