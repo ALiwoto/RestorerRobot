@@ -65,11 +65,19 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	}
 
 	if isLocalFileDir {
+		sourceFileName = name              // the `name` variable represents a local file/dir
 		sectionName := filepath.Base(name) // dummy sectionName
 		originFileName = wotoConfig.GetBaseDirForBackup(sectionName) +
 			backupUtils.GenerateFileNameFromValue(sectionName)
 		finalFileName = originFileName + wotoConfig.CompressedFileExtension
 		targetChats = append(targetChats, userId)
+
+		// fetch file size
+		fileInfo, err := os.Stat(sourceFileName)
+		if err == nil {
+			// format the file size
+			sourceFileSize = backupUtils.FormatFileSize(fileInfo.Size())
+		}
 
 		captionOptions := &backupUtils.GenerateCaptionOptions{
 			ConfigName:     sectionName,
