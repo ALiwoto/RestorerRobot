@@ -25,7 +25,7 @@ func BackupDatabase(url, filename string, bType wotoConfig.DatabaseBackupType) e
 	}
 
 	backupCommand := wotoConfig.GetPgDumpCommand() + " -d " + url + " "
-	// #TODO: convert this ughly if-else statement to a cute switch in future
+	// #TODO: convert this ugly if-else statement to a cute switch in future
 	if bType == wotoConfig.BackupTypeSQL {
 		backupCommand += ">> " + filename
 	} else if bType == wotoConfig.BackupTypeDump {
