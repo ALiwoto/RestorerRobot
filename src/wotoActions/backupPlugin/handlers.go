@@ -47,10 +47,6 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		return em.ErrEndGroups
 	}
 
-	if bType == "" {
-		bType = string(wotoConfig.BackupTypeDump) // default is .dump
-	}
-
 	isUrl := wotoGlobals.IsPostgresDatabaseUrl(name)
 	isLocalFileDir := wotoGlobals.IsValidLocalFileOrDir(name)
 	var theUrl string         // the url of the database we have to pass to backup helper function
@@ -59,6 +55,21 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	var originFileName string // the origin name that we have to append extensions to it
 	var finalFileName string  // the file to be uploaded to tg
 	var sourceFileSize string // the file size in this format: 10MB or 10.5MB
+
+	if bType == "" {
+		// here is a little trick to fix the case where user has provided
+		// a path to a local file/directory and we don't want it to be .dump
+		// (because it obviously ain't a .dump file)
+		if isLocalFileDir {
+			if strings.HasSuffix(name, ".db") || strings.HasSuffix(name, ".sqlite") {
+				bType = string(wotoConfig.BackupTypeSQLite)
+			} else {
+				bType = string(wotoConfig.BackupTypeDirectory)
+			}
+		} else {
+			bType = string(wotoConfig.BackupTypeDump) // default is .dump
+		}
+	}
 
 	if !isPrivate {
 		targetChats = append(targetChats, wotoConfig.GetGlobalLogChannels()...)
