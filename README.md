@@ -43,6 +43,12 @@ backup_interval = 20
 log_channels = -10012548, -1005487
 backup_type = dump
 
+[StalkerGameRobot]
+db_path = E:\StalkerGameRobot\user.db
+# backup interval in days
+backup_interval = 7
+#log_channels = -10012548, -1005487
+backup_type = sqlite
 ```
 
 Config file contains `main` sections and other sections, every field in the main section

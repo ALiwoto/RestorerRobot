@@ -19,6 +19,7 @@ type MainConfigSection struct {
 
 type ValueSection struct {
 	DbUrl          string  `key:"db_url"`
+	DbPath         string  `key:"db_path"`
 	LogChannels    []int64 `key:"log_channels"`
 	BackupType     string  `key:"backup_type" default:"sql"`
 	BackupInterval int     `key:"backup_interval" default:"10"`

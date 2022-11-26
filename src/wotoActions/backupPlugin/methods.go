@@ -168,14 +168,15 @@ func (c *BackupScheduleContainer) RunBackup() {
 	}
 
 	section := c.DatabaseConfig
-	var err error             // failed err reason
-	var theUrl string         // the url of the database we have to pass to backup helper function
-	var targetChats []int64   // the chats we want to send our files to
-	var sourceFileName string // the uncompressed backup file (output of the backup command)
-	var originFileName string // the origin name that we have to append extensions to it
-	var finalFileName string  // the file to be uploaded to tg
-	var sourceFileSize string // the file size in this format: 10MB or 10.5MB
-	var bType string          // the backup type in string
+	var err error                // failed err reason
+	var theUrl string            // the url of the database we have to pass to backup helper function
+	var targetChats []int64      // the chats we want to send our files to
+	var sourceFileName string    // the uncompressed backup file (output of the backup command)
+	var originFileName string    // the origin name that we have to append extensions to it
+	var finalFileName string     // the file to be uploaded to tg
+	var sourceFileSize string    // the file size in this format: 10MB or 10.5MB
+	var bType string             // the backup type in string
+	var shouldRemoveSrcFile bool // should we be removing the sourceFileName at the end?
 
 	theUrl = section.DbUrl
 	if section.BackupType != "" {
@@ -185,23 +186,39 @@ func (c *BackupScheduleContainer) RunBackup() {
 	sectionName := section.GetSectionName()
 	originFileName = wotoConfig.GetBaseDirForBackup(sectionName) +
 		backupUtils.GenerateFileNameFromValue(sectionName)
-	sourceFileName = originFileName + "." + bType
 	finalFileName = originFileName + wotoConfig.CompressedFileExtension
 	targetChats = append(targetChats, section.LogChannels...)
 	targetChats = append(targetChats, c.ChatIDs...)
 
-	err = backupUtils.BackupDatabase(theUrl, sourceFileName, toBackupType(bType))
-	if err != nil {
-		setError(err)
+	// Please do note if both `db_url` and `db_path` are provided, the priority is with `db_url`,
+	// which means `db_path` will completely get ignored in that case.
+	if section.DbUrl != "" {
+		sourceFileName = originFileName + "." + bType
+
+		err = backupUtils.BackupDatabase(theUrl, sourceFileName, toBackupType(bType))
+		if err != nil {
+			setError(err)
+			return
+		}
+
+		shouldRemoveSrcFile = true
+	} else if section.DbPath != "" {
+		sourceFileName = section.DbPath
+	} else {
+		setError(ErrNoPathOrUrlSet)
 		return
 	}
 
 	// fetch file size
 	fileInfo, err := os.Stat(sourceFileName)
-	if err == nil {
-		// format the file size
-		sourceFileSize = backupUtils.FormatFileSize(fileInfo.Size())
+
+	if err != nil {
+		setError(err)
+		return
 	}
+
+	// format the file size
+	sourceFileSize = backupUtils.FormatFileSize(fileInfo.Size())
 
 	captionOptions := &backupUtils.GenerateCaptionOptions{
 		ConfigName:     sectionName,
@@ -218,7 +235,10 @@ func (c *BackupScheduleContainer) RunBackup() {
 		setError(err)
 		return
 	}
-	_ = os.Remove(sourceFileName)
+
+	if shouldRemoveSrcFile {
+		_ = os.Remove(sourceFileName)
+	}
 
 	err = c.UploadFileToChats(finalFileName, &em.UploadDocumentToChatsOptions{
 		FileName:   filepath.Base(finalFileName),
