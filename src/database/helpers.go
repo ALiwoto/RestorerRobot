@@ -11,7 +11,6 @@ import (
 )
 
 func StartDatabase() error {
-
 	// check if `SESSION` variable is already established or not.
 	// if yes, check if we have got any error from it or not.
 	// if there is an error in the session, it mean we have to establish
