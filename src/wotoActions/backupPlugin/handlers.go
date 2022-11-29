@@ -140,7 +140,11 @@ func forceBackupHandler(container *em.WotoContainer) error {
 			backupUtils.GenerateFileNameFromValue(sectionName)
 		sourceFileName = originFileName + "." + bType
 		finalFileName = originFileName + wotoConfig.CompressedFileExtension
-		targetChats = append(targetChats, section.LogChannels...)
+		if section.NoGlobal {
+			targetChats = section.LogChannels
+		} else {
+			targetChats = append(targetChats, section.LogChannels...)
+		}
 		targetChats = append(targetChats, userId)
 
 		err = backupUtils.BackupDatabase(theUrl, sourceFileName, toBackupType(bType))

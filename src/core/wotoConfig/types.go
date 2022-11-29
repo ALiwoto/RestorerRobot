@@ -23,5 +23,6 @@ type ValueSection struct {
 	LogChannels    []int64 `key:"log_channels"`
 	BackupType     string  `key:"backup_type" default:"sql"`
 	BackupInterval int     `key:"backup_interval" default:"10"`
+	NoGlobal       bool    `key:"no_global"`
 	sectionName    string
 }

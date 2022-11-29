@@ -42,6 +42,9 @@ backup_interval = 20
 # additional log channels, backup file will be sent to these channels
 log_channels = -10012548, -1005487
 backup_type = dump
+# if you set this to true, bot won't send backup files of this config section
+# to the global log channel. they will only be sent to their specified log channel.
+no_global = true
 
 [StalkerGameRobot]
 db_path = E:\StalkerGameRobot\user.db

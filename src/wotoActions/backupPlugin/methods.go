@@ -188,7 +188,9 @@ func (c *BackupScheduleContainer) RunBackup() {
 		backupUtils.GenerateFileNameFromValue(sectionName)
 	finalFileName = originFileName + wotoConfig.CompressedFileExtension
 	targetChats = append(targetChats, section.LogChannels...)
-	targetChats = append(targetChats, c.ChatIDs...)
+	if !section.NoGlobal {
+		targetChats = append(targetChats, c.ChatIDs...)
+	}
 
 	// Please do note if both `db_url` and `db_path` are provided, the priority is with `db_url`,
 	// which means `db_path` will completely get ignored in that case.
