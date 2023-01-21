@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  restorerrobot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: restorerrobot
+    container_name: restorerrobot
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Kolkata
+    volumes:
+      - /home/ubuntu/containers/restorerrobot/data/config.ini:/app/config.ini
+      - /home/ubuntu/containers/restorerrobot/data/backups:/app/backups
+      - /home/ubuntu/containers/restorerrobot/data/session:/app/session
+    networks:
+      - bot
+      - databases
+
+networks:
+  bot:
+    name: restorerrobot
+    driver: bridge
+  databases:
+    external: true
