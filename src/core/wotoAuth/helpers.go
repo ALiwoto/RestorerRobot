@@ -24,8 +24,13 @@ func getProxy() dcs.Resolver {
 		return nil
 	}
 
-	queries, err := url.ParseQuery(proxyStr)
-	if err != nil || len(queries) < 3 {
+	urlValue, err := url.Parse(proxyStr)
+	if err != nil {
+		return nil
+	}
+
+	queries := urlValue.Query()
+	if len(queries) < 3 {
 		return nil
 	}
 
