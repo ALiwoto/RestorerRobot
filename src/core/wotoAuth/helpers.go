@@ -2,6 +2,7 @@ package wotoAuth
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
@@ -11,17 +12,35 @@ import (
 	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions"
 	"github.com/go-faster/errors"
 	"github.com/gotd/td/telegram"
+	"github.com/gotd/td/telegram/dcs"
 	tgMessage "github.com/gotd/td/telegram/message"
 	updHook "github.com/gotd/td/telegram/updates/hook"
 	"github.com/gotd/td/tg"
 )
 
-func AuthorizeClient(updateHandler wv.WotoUpdateHandler) error {
-	err := wotoConfig.PrepareVariables()
-	if err != nil {
-		return err
+func getProxy() dcs.Resolver {
+	proxyStr := wotoConfig.GetProxy()
+	if proxyStr == "" {
+		return nil
 	}
 
+	queries, err := url.ParseQuery(proxyStr)
+	if err != nil || len(queries) < 3 {
+		return nil
+	}
+
+	pAddr := queries["server"][0] + ":" + queries["port"][0]
+	pSecret := queries["secret"][0]
+	proxyValue, err := dcs.MTProxy(pAddr, []byte(pSecret), dcs.MTProxyOptions{})
+	if err != nil {
+		logging.Error("failed to create mtproto proxy:" + err.Error())
+		return nil
+	}
+
+	return proxyValue
+}
+
+func AuthorizeClient(updateHandler wv.WotoUpdateHandler) error {
 	ctx := context.Background()
 
 	//wv.UpdateManager = updates.New(updates.Config{
@@ -37,7 +56,7 @@ func AuthorizeClient(updateHandler wv.WotoUpdateHandler) error {
 		realDispatcher: dispatcher,
 	}
 
-	client, err := telegram.ClientFromEnvironment(telegram.Options{
+	client := telegram.NewClient(wotoConfig.GetAppId(), wotoConfig.GetAppHash(), telegram.Options{
 		//Logger: log,
 		//UpdateHandler: wv.UpdateManager,
 		UpdateHandler: wDispatcher,
@@ -45,10 +64,13 @@ func AuthorizeClient(updateHandler wv.WotoUpdateHandler) error {
 			//updHook.UpdateHook(uHandler),
 			updHook.UpdateHook(wDispatcher.Handle),
 		},
+		Device: telegram.DeviceConfig{
+			DeviceModel:   "Android 12 Snow Cone",
+			SystemVersion: "12.0.13089",
+			AppVersion:    "1.0.3",
+		},
+		Resolver: GetProxy(),
 	})
-	if err != nil {
-		return err
-	}
 
 	wg.Client = client
 	wg.SenderHelper = tgMessage.NewSender(client.API())

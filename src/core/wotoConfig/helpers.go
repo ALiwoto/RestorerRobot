@@ -1,7 +1,6 @@
 package wotoConfig
 
 import (
-	"errors"
 	"os"
 	"time"
 
@@ -30,29 +29,6 @@ func LoadConfigFromFile(fileName string) error {
 
 func LoadConfig() error {
 	return LoadConfigFromFile("config.ini")
-}
-
-func PrepareVariables() error {
-	if WotoConf == nil {
-		return errors.New("woto configuration is not loaded")
-	}
-
-	err := os.Setenv("APP_ID", GetAppId())
-	if err != nil {
-		return err
-	}
-
-	err = os.Setenv("APP_HASH", GetAppHash())
-	if err != nil {
-		return err
-	}
-
-	err = os.Setenv("SESSION_FILE", GetSessionPath())
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func PrepareDirectories() {
@@ -113,7 +89,7 @@ func IsOwner(id int64) bool {
 	return false
 }
 
-func GetAppId() string {
+func GetAppId() int {
 	return WotoConf.Main.AppId
 }
 
@@ -123,6 +99,10 @@ func GetBotToken() string {
 
 func GetAppHash() string {
 	return WotoConf.Main.AppHash
+}
+
+func GetProxy() string {
+	return WotoConf.Main.Proxy
 }
 
 func GetDbPath() string {

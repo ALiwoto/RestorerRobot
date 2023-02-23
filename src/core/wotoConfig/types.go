@@ -3,8 +3,9 @@ package wotoConfig
 type DatabaseBackupType string
 
 type MainConfigSection struct {
-	AppId                   string  `key:"app_id"`
+	AppId                   int     `key:"app_id"`
 	AppHash                 string  `key:"app_hash"`
+	Proxy                   string  `key:"proxy"`
 	BotToken                string  `key:"bot_token"`
 	DatabasePath            string  `key:"database_path"`
 	BackupsBaseDir          string  `key:"backups_base_directory_path"`
