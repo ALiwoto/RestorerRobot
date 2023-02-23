@@ -27,12 +27,14 @@ session/*.woto
 session/*.w
 session/*.wotoub
 session/*.wotoutils
+session.new
 
 # log files
 *.log
 
 # configuration file
 config.ini
+config.old.ini
 
 
 # Dependency directories (remove the comment below to include it)
