@@ -109,7 +109,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
 			FileName:   filepath.Base(finalFileName),
 			ChatIDs:    targetChats,
-			Goroutines: 60,
+			Goroutines: wotoGlobals.BaseUploadGoroutines,
 			Caption:    backupUtils.GenerateCaption(captionOptions),
 		})
 		if err != nil {
@@ -180,7 +180,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 		err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
 			FileName:   filepath.Base(finalFileName),
 			ChatIDs:    targetChats,
-			Goroutines: 60,
+			Goroutines: wotoGlobals.BaseUploadGoroutines,
 			Caption:    backupUtils.GenerateCaption(captionOptions),
 		})
 		if err != nil {
@@ -225,7 +225,7 @@ func forceBackupHandler(container *em.WotoContainer) error {
 	err = container.UploadFileToChatsByPath(finalFileName, &em.UploadDocumentToChatsOptions{
 		FileName:   filepath.Base(finalFileName),
 		ChatIDs:    targetChats,
-		Goroutines: 60,
+		Goroutines: wotoGlobals.BaseUploadGoroutines,
 		Caption:    backupUtils.GenerateCaption(captionOptions),
 	})
 	if err != nil {
