@@ -56,7 +56,7 @@ func getDefaultSessionPath() string {
 
 	se := string(os.PathSeparator)
 
-	return dir + se + "session" + se + "session.wotoub.json"
+	return dir + se + "session" + se + "session.restorerbot.json"
 }
 
 func IsDebug() bool {

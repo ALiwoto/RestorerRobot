@@ -81,6 +81,9 @@ func AuthorizeClient(updateHandler wv.WotoUpdateHandler) error {
 			AppVersion:    "1.0.3",
 		},
 		Resolver: GetProxy(),
+		SessionStorage: &telegram.FileSessionStorage{
+			Path: wotoConfig.GetSessionPath(),
+		},
 	})
 
 	wg.Client = client
