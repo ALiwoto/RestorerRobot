@@ -3,6 +3,7 @@ package wotoAuth
 import (
 	"context"
 	"net/url"
+	"strconv"
 
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
@@ -36,9 +37,23 @@ func getProxy() dcs.Resolver {
 
 	pAddr := queries["server"][0] + ":" + queries["port"][0]
 	pSecret := queries["secret"][0]
-	proxyValue, err := dcs.MTProxy(pAddr, []byte(pSecret), dcs.MTProxyOptions{})
+	var bSecret []byte
+	tmpStr := ""
+	for i := range pSecret {
+		if i%2 == 0 {
+			tmpStr = string(pSecret[i])
+			continue
+		}
+		tmpStr += string(pSecret[i])
+
+		tmpByte, _ := strconv.ParseInt(tmpStr, 16, 16)
+		bSecret = append(bSecret, byte(tmpByte))
+		tmpStr = ""
+	}
+
+	proxyValue, err := dcs.MTProxy(pAddr, bSecret, dcs.MTProxyOptions{})
 	if err != nil {
-		logging.Error("failed to create mtproto proxy:" + err.Error())
+		logging.Error("failed to create mtproto proxy: " + err.Error())
 		return nil
 	}
 

@@ -8,7 +8,7 @@ require (
 	github.com/go-faster/errors v0.6.1
 	github.com/gotd/td v0.76.0
 	go.uber.org/zap v1.24.0
-	gorm.io/driver/sqlite v1.4.3
+	gorm.io/driver/sqlite v1.4.4
 	gorm.io/gorm v1.24.2
 )
 
