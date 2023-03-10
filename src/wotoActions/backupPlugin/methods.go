@@ -151,6 +151,10 @@ func (c *BackupScheduleContainer) GetBackupType() string {
 
 func (c *BackupScheduleContainer) RunBackup() {
 	c.mut.Lock()
+	// a little bit delay to prevent telegram-side limitation
+	// the delay here should become dynamic in future
+	// (e.g. the more uploads we have done, the more seconds we get delay between them).
+	time.Sleep(10 * time.Second)
 	defer c.mut.Unlock()
 
 	if c.currentInfo == nil || c.isSleeping {
