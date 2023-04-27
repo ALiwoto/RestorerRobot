@@ -18,7 +18,7 @@ type ManagerGroup []*EntryManager
 type EntryManager struct {
 	triggers   []rune
 	entryMap   map[string]*entry
-	entryMutex *sync.Mutex
+	entryMutex *sync.RWMutex
 }
 
 type entry struct {

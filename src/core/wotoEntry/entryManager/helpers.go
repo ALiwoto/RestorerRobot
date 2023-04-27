@@ -6,7 +6,7 @@ import (
 
 func NewManager(triggers []rune) *EntryManager {
 	return &EntryManager{
-		entryMutex: &sync.Mutex{},
+		entryMutex: &sync.RWMutex{},
 		entryMap:   make(map[string]*entry),
 		triggers:   triggers,
 	}

@@ -4,7 +4,6 @@ import (
 	"context"
 	"path"
 	"strings"
-	"sync"
 
 	"github.com/ALiwoto/argparser/argparser"
 	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
@@ -25,20 +24,13 @@ func (m *EntryManager) IsEmpty() bool {
 }
 
 func (m *EntryManager) GetEntry(name string) *entry {
-	if m.entryMutex == nil {
-		m.entryMutex = &sync.Mutex{}
-	}
-	m.entryMutex.Lock()
+	m.entryMutex.RLock()
 	e := m.entryMap[strings.ToLower(name)]
-	m.entryMutex.Unlock()
+	m.entryMutex.RUnlock()
 	return e
 }
 
 func (m *EntryManager) AddEntry(name string, e *entry) {
-	if m.entryMutex == nil {
-		m.entryMutex = &sync.Mutex{}
-	}
-
 	m.entryMutex.Lock()
 	m.entryMap[strings.ToLower(name)] = e
 	m.entryMutex.Unlock()
@@ -67,9 +59,6 @@ func (m *EntryManager) AddHandlers(name string, h ...MessageHandler) *entry {
 }
 
 func (m *EntryManager) RemoveEntry(name string) {
-	if m.entryMutex == nil {
-		m.entryMutex = &sync.Mutex{}
-	}
 	m.entryMutex.Lock()
 	delete(m.entryMap, name)
 	m.entryMutex.Unlock()
@@ -105,7 +94,7 @@ func (m *EntryManager) ShouldRevoke(message string) bool {
 func (m *EntryManager) Revoke(container *WotoContainer) (next bool) {
 	message := container.Message
 	if m.ShouldRevoke(message.Message) {
-		m.entryMutex.Lock()
+		m.entryMutex.RLock()
 		for _, entry := range m.entryMap {
 			if entry.IsEnabled() && entry.ShouldRun(message) {
 				next = entry.RunHandlers(container)
@@ -114,7 +103,7 @@ func (m *EntryManager) Revoke(container *WotoContainer) (next bool) {
 				}
 			}
 		}
-		m.entryMutex.Unlock()
+		m.entryMutex.RUnlock()
 		return false
 	}
 
