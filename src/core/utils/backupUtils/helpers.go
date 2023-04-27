@@ -24,7 +24,7 @@ func BackupDatabase(url, filename string, bType wotoConfig.DatabaseBackupType) e
 		return errors.New("unsupported backup type")
 	}
 
-	backupCommand := wotoConfig.GetPgDumpCommand() + " -d " + url + " "
+	backupCommand := wotoConfig.GetPgDumpCommand() + " -d " + url + " -x --no-owner "
 	// #TODO: convert this ugly if-else statement to a cute switch in future
 	if bType == wotoConfig.BackupTypeSQL {
 		backupCommand += ">> " + filename
