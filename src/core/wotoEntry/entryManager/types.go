@@ -3,7 +3,7 @@ package entryManager
 import (
 	"sync"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoStyle"
 	"github.com/gotd/td/telegram"
 	"github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/tg"

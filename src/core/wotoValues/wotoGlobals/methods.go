@@ -3,7 +3,7 @@ package wotoGlobals
 import (
 	"strings"
 
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/ssg/ssg"
 )
 
 // --------------------------------------------------------

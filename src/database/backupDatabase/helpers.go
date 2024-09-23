@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
-	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	wg "github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"gorm.io/gorm"
 )
 

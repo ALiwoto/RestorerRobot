@@ -6,5 +6,5 @@ const (
 )
 
 const (
-	gitBaseUrl = "https://github.com/AnimeKaizoku/RestorerRobot"
+	gitBaseUrl = "https://github.com/ALiwoto/RestorerRobot"
 )

@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoStyle"
+	"github.com/ALiwoto/ssg/ssg"
 	fErrors "github.com/go-faster/errors"
 )
 

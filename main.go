@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoAuth"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry"
-	"github.com/AnimeKaizoku/RestorerRobot/src/database"
+	"github.com/ALiwoto/RestorerRobot/src/core/utils/logging"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoAuth"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoEntry"
+	"github.com/ALiwoto/RestorerRobot/src/database"
 	"github.com/go-faster/errors"
 )
 

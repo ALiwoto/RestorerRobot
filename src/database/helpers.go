@@ -1,10 +1,10 @@
 package database
 
 import (
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/logging"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
-	"github.com/AnimeKaizoku/RestorerRobot/src/database/sessionDatabase"
+	"github.com/ALiwoto/RestorerRobot/src/core/utils/logging"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	"github.com/ALiwoto/RestorerRobot/src/database/backupDatabase"
+	"github.com/ALiwoto/RestorerRobot/src/database/sessionDatabase"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

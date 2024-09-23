@@ -4,13 +4,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
-	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
-	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions/backupPlugin"
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	em "github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoStyle"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/RestorerRobot/src/database/backupDatabase"
+	"github.com/ALiwoto/RestorerRobot/src/wotoActions/backupPlugin"
+	"github.com/ALiwoto/ssg/ssg"
 )
 
 func configsHandler(container *em.WotoContainer) error {

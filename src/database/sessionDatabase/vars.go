@@ -4,8 +4,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/ssg/ssg"
 	"gorm.io/gorm"
 )
 

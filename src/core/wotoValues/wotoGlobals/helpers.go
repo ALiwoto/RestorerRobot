@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/ssg/ssg"
 )
 
 func IsPostgresDatabaseUrl(value string) bool {

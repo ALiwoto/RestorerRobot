@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/backupUtils"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/RestorerRobot/src/core/utils/backupUtils"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	em "github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
 )
 
 func forceBackupHandler(container *em.WotoContainer) error {

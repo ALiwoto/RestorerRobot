@@ -3,8 +3,8 @@ package wotoEntry
 import (
 	"context"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/gotd/td/tg"
 )
 

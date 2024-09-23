@@ -1,12 +1,12 @@
 package wotoActions
 
 import (
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	wv "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
-	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions/backupPlugin"
-	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions/helpPlugin"
-	"github.com/AnimeKaizoku/RestorerRobot/src/wotoActions/statsPlugin"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	em "github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	wv "github.com/ALiwoto/RestorerRobot/src/core/wotoValues"
+	"github.com/ALiwoto/RestorerRobot/src/wotoActions/backupPlugin"
+	"github.com/ALiwoto/RestorerRobot/src/wotoActions/helpPlugin"
+	"github.com/ALiwoto/RestorerRobot/src/wotoActions/statsPlugin"
 )
 
 // LoadAllHandlers will load all handlers from all plugins.

@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
-	"github.com/AnimeKaizoku/ssg/ssg"
-	"github.com/AnimeKaizoku/ssg/ssg/shellUtils"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoStyle"
+	"github.com/ALiwoto/ssg/ssg"
+	"github.com/ALiwoto/ssg/ssg/shellUtils"
 )
 
 func fetchGitStats(md wotoStyle.WStyle) {

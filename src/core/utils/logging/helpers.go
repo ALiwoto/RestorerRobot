@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/timeUtils"
+	"github.com/ALiwoto/RestorerRobot/src/core/utils/timeUtils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

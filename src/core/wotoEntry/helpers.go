@@ -6,9 +6,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
-	"github.com/AnimeKaizoku/RestorerRobot/src/database/sessionDatabase"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues"
+	"github.com/ALiwoto/RestorerRobot/src/database/sessionDatabase"
 	"github.com/gotd/td/tg"
 )
 

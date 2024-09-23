@@ -1,7 +1,7 @@
 package wotoValues
 
 import (
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
 )
 
 var (

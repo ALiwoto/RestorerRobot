@@ -1,6 +1,6 @@
 package wotoConfig
 
-import "github.com/AnimeKaizoku/ssg/ssg/strongParser"
+import "github.com/ALiwoto/ssg/ssg/strongParser"
 
 var WotoConf *strongParser.MainAndArrayContainer[MainConfigSection, ValueSection]
 

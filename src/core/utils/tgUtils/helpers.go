@@ -1,7 +1,7 @@
 package tgUtils
 
 import (
-	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	wg "github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/gotd/td/tg"
 )
 

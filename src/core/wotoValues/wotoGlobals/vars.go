@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/ssg/ssg"
 	"github.com/gotd/td/telegram"
 	tgMessage "github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/telegram/updates"

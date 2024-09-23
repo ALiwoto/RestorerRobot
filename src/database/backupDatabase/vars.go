@@ -3,8 +3,8 @@ package backupDatabase
 import (
 	"sync"
 
-	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
-	"github.com/AnimeKaizoku/ssg/ssg"
+	wg "github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/ssg/ssg"
 	"gorm.io/gorm"
 )
 

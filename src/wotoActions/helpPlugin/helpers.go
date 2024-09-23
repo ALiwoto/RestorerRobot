@@ -1,6 +1,6 @@
 package helpPlugin
 
-import "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
+import "github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
 
 func LoadAllHandlers(manager *entryManager.EntryManager) {
 	manager.AddHandlers(configsCmd, configsHandler)

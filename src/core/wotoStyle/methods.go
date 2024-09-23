@@ -1,7 +1,7 @@
 package wotoStyle
 
 import (
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
+	"github.com/ALiwoto/RestorerRobot/src/core/utils/tgUtils"
 	"github.com/gotd/td/telegram/message/styling"
 	"github.com/gotd/td/tg"
 )

@@ -4,10 +4,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/utils/tgUtils"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
-	wg "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
-	"github.com/AnimeKaizoku/ssg/ssg"
+	"github.com/ALiwoto/RestorerRobot/src/core/utils/tgUtils"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues"
+	wg "github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/ssg/ssg"
 	"github.com/gotd/td/tg"
 	"gorm.io/gorm"
 )

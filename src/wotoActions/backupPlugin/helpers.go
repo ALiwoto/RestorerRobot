@@ -3,9 +3,9 @@ package backupPlugin
 import (
 	"sync"
 
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/database/backupDatabase"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/database/backupDatabase"
 )
 
 func GetContainerByName(name string) *BackupScheduleContainer {

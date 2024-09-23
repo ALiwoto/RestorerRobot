@@ -1,10 +1,10 @@
 package statsPlugin
 
 import (
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoConfig"
-	em "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoEntry/entryManager"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoStyle"
-	"github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
+	em "github.com/ALiwoto/RestorerRobot/src/core/wotoEntry/entryManager"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoStyle"
+	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
 )
 
 func statusHandler(container *em.WotoContainer) error {

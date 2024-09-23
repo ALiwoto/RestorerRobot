@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/AnimeKaizoku/ssg/ssg/strongParser"
+	"github.com/ALiwoto/ssg/ssg/strongParser"
 )
 
 func LoadConfigFromFile(fileName string) error {

@@ -1,7 +1,7 @@
 package wotoAuth
 
 import (
-	wv "github.com/AnimeKaizoku/RestorerRobot/src/core/wotoValues"
+	wv "github.com/ALiwoto/RestorerRobot/src/core/wotoValues"
 	"github.com/gotd/td/tg"
 )
 
