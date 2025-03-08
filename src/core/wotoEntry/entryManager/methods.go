@@ -5,11 +5,11 @@ import (
 	"path"
 	"strings"
 
-	"github.com/ALiwoto/argparser/argparser"
 	"github.com/ALiwoto/RestorerRobot/src/core/utils/tgUtils"
 	"github.com/ALiwoto/RestorerRobot/src/core/wotoConfig"
 	"github.com/ALiwoto/RestorerRobot/src/core/wotoStyle"
 	wg "github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
+	"github.com/ALiwoto/argparser/argparser"
 	"github.com/gotd/td/telegram"
 	"github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/telegram/message/styling"
@@ -77,7 +77,7 @@ func (m *EntryManager) SetTriggers(t []rune) {
 	m.triggers = t
 }
 
-func (m *EntryManager) ShouldRevoke(message string) bool {
+func (m *EntryManager) ShouldInvoke(message string) bool {
 	if len(message) < 2 {
 		return false
 	}
@@ -91,9 +91,9 @@ func (m *EntryManager) ShouldRevoke(message string) bool {
 	return false
 }
 
-func (m *EntryManager) Revoke(container *WotoContainer) (next bool) {
+func (m *EntryManager) Invoke(container *WotoContainer) (next bool) {
 	message := container.Message
-	if m.ShouldRevoke(message.Message) {
+	if m.ShouldInvoke(message.Message) {
 		m.entryMutex.RLock()
 		for _, entry := range m.entryMap {
 			if entry.IsEnabled() && entry.ShouldRun(message) {
@@ -190,7 +190,7 @@ func (e *entry) RunHandlers(container *WotoContainer) (next bool) {
 
 func (g ManagerGroup) TryToRun(container *WotoContainer) {
 	for _, manager := range g {
-		if !manager.Revoke(container) {
+		if !manager.Invoke(container) {
 			return
 		}
 	}
