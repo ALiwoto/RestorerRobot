@@ -94,7 +94,9 @@ func GetInputUser(id, hash int64) *tg.InputUser {
 }
 
 func GetInputUserFromUsername(username string) *tg.InputUser {
-	contacts, err := wg.API.ContactsResolveUsername(gCtx, username)
+	contacts, err := wg.API.ContactsResolveUsername(gCtx, &tg.ContactsResolveUsernameRequest{
+		Username: username,
+	})
 	if err != nil || contacts == nil {
 		return nil
 	}

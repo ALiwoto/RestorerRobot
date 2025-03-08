@@ -3,11 +3,10 @@ package logging
 import (
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"os"
 
-	"github.com/ALiwoto/RestorerRobot/src/core/utils/timeUtils"
+	"github.com/ALiwoto/ssg/ssg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -65,7 +64,7 @@ func UnexpectedError(err error) {
 	} else {
 		log.Println("Unexpected Error: ", err)
 	}
-	_ = ioutil.WriteFile(GetLogErrorPath(), []byte(err.Error()), fs.ModePerm)
+	_ = os.WriteFile(GetLogErrorPath(), []byte(err.Error()), fs.ModePerm)
 }
 
 func Info(args ...interface{}) {
@@ -111,8 +110,8 @@ func Fatal(args ...interface{}) {
 func LogPanic(details []byte) {
 	p := string(os.PathSeparator)
 	path := "logs" + p + "panics/" +
-		"panic_" + timeUtils.GenerateSuitableDateTime() + ".log"
-	err := ioutil.WriteFile(path, details, fs.ModePerm)
+		"panic_" + ssg.GenerateSuitableDateTime() + ".log"
+	err := os.WriteFile(path, details, fs.ModePerm)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -121,5 +120,5 @@ func LogPanic(details []byte) {
 func GetLogErrorPath() string {
 	p := string(os.PathSeparator)
 	return "logs" + p + "errors/" +
-		"error_" + timeUtils.GenerateSuitableDateTime() + ".log"
+		"error_" + ssg.GenerateSuitableDateTime() + ".log"
 }

@@ -432,7 +432,9 @@ func (c *WotoContainer) GetClient() *telegram.Client {
 }
 
 func (c *WotoContainer) ResolveUsername(username string) (*tg.ContactsResolvedPeer, error) {
-	return wg.API.ContactsResolveUsername(gCtx, username)
+	return wg.API.ContactsResolveUsername(gCtx, &tg.ContactsResolveUsernameRequest{
+		Username: username,
+	})
 }
 
 func (c *WotoContainer) API() *tg.Client {
@@ -444,7 +446,9 @@ func (c *WotoContainer) GetFullUserById(userId int64) (*tg.UsersUserFull, error)
 }
 
 func (c *WotoContainer) ResolveUsernameToUser(username string) *tg.User {
-	contacts, err := c.API().ContactsResolveUsername(gCtx, username)
+	contacts, err := c.API().ContactsResolveUsername(gCtx, &tg.ContactsResolveUsernameRequest{
+		Username: username,
+	})
 	if err != nil || contacts == nil {
 		return nil
 	}

@@ -14,7 +14,7 @@ type MainConfigSection struct {
 	Owners                  []int64 `key:"owners"`
 	CmdPrefixes             []rune  `key:"cmd_prefixes" type:"[]rune"`
 	SessionFile             string  `key:"session_file"`
-	ScheduleManagerInterval int     `key:"schedule_manager_interval" default:"10"`
+	ScheduleManagerInterval int     `key:"schedule_manager_interval" default:"4"`
 	Debug                   bool    `key:"debug"`
 }
 
@@ -23,7 +23,7 @@ type ValueSection struct {
 	DbPath         string  `key:"db_path"`
 	LogChannels    []int64 `key:"log_channels"`
 	BackupType     string  `key:"backup_type" default:"sql"`
-	BackupInterval int     `key:"backup_interval" default:"10"`
+	BackupInterval string  `key:"backup_interval" default:"10d"`
 	NoGlobal       bool    `key:"no_global"`
 	sectionName    string
 }

@@ -43,7 +43,7 @@ func loadScheduler() {
 
 	containersMutex := &sync.Mutex{}
 
-	for i := 0; i < len(configs); i++ {
+	for i := range configs {
 		manager.containers[i] = &BackupScheduleContainer{
 			DatabaseConfig: configs[i],
 			LastBackupDate: backupDatabase.GetLastBackupDate(configs[i].GetSectionName()),

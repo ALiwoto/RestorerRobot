@@ -17,6 +17,7 @@ import (
 	"github.com/ALiwoto/RestorerRobot/src/core/wotoValues/wotoGlobals"
 	"github.com/ALiwoto/RestorerRobot/src/database/backupDatabase"
 	"github.com/ALiwoto/ssg/ssg"
+	"github.com/ALiwoto/ssg/ssg/timeUtils"
 	"github.com/gotd/td/telegram/message"
 	"github.com/gotd/td/telegram/uploader"
 )
@@ -104,8 +105,12 @@ func (m *BackupScheduleManager) PrepareBackupInfo(currentContainers []*BackupSch
 	}
 }
 
-func (m *BackupScheduleManager) convertToBackupInterval(days int) time.Duration {
-	return time.Duration(days) * 24 * time.Hour
+func (m *BackupScheduleManager) convertToBackupInterval(value string) time.Duration {
+	parsedDuration := timeUtils.ParseDurationWithDefault(value, 24*time.Hour)
+	if parsedDuration < MinSchedulerDuration {
+		return MinSchedulerDuration
+	}
+	return parsedDuration
 }
 
 // --------------------------------------------------------
